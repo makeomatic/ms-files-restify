@@ -16,6 +16,7 @@ const config = {
       process: 'process',
       list: 'list',
     },
+    timeouts: {},
   },
 };
 
@@ -33,4 +34,19 @@ exports.get = function returnConfigurationObject() {
 exports.reconfigure = function reconfigure(opts) {
   ld.merge(config, opts);
   users.reconfigure(config);
+};
+
+/**
+ * returns timeout for a route
+ */
+exports.getTimeout = function getTimeout(route) {
+  return config.files.timeouts[route] || 5000;
+};
+
+/**
+ * Returns text route
+ */
+exports.getRoute = function getRoute(route) {
+  const files = config.files;
+  return [files.prefix, files.postfix[route]].join('.');
 };

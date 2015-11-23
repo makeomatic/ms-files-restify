@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [ "data" ],
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [ "attributes", "id" ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [ "upload" ]
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
