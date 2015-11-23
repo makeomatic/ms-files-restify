@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/makeomatic/ms-files-restify#readme",
   "dependencies": {
-
+    "debug": "^2.2.0",
+    "glob": "^6.0.1",
+    "lodash": "^3.10.1",
+    "ms-users-restify": "^0.4.0",
+    "restify-utils": "^0.1.8"
   },
   "devDependencies": {
     "babel": "^5.8.34",

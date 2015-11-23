@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [ "data" ],
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [ "attributes", "type" ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [ "file" ]
+        },
+        "attributes": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [ "md5Hash", "contentType", "contentLength" ],
+          "properties": {
+            "contentType": {
+              "type": "string"
+            },
+            "contentEncoding": {
+              "type": "string"
+            },
+            "md5Hash": {
+              "type": "string",
+              "length": 32
+            },
+            "contentLength": {
+              "type": "integer",
+              "min": 1,
+              "max": 2000000000
+            }
+          }
+        }
+      }
+    }
+  }
+}
