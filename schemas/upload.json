@@ -18,6 +18,11 @@
           "type": "object",
           "required": [ "md5Hash", "contentType", "contentLength" ],
           "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
             "contentType": {
               "type": "string"
             },

@@ -25,6 +25,22 @@ const ROUTE_NAME = 'info';
  *
  * @apiUse UserAuthResponse
  *
+ * @apiSuccess (Code 200) {Object} meta                           meta container
+ * @apiSuccess (COde 200) {String} meta.id                        request id
+ * @apiSuccess (Code 200) {Object} data                           data container
+ * @apiSuccess (Code 200) {String} data.type                      "upload"
+ * @apiSuccess (Code 200) {String} data.id                        upload id
+ * @apiSuccess (Code 200) {Object} data.attributes                attributes container
+ * @apiSuccess (Code 200) {String} data.attributes.name           custom name of the file
+ * @apiSuccess (Code 200) {Number} data.attributes.startedAt      when file upload was started
+ * @apiSuccess (Code 200) {String} data.attributes.status         status of the file, `pending`, `uploaded` or `processed`
+ * @apiSuccess (Code 200) {String} data.attributes.contentType    content type of the file
+ * @apiSuccess (Code 200) {Number} data.attributes.contentLength  size in bytes
+ * @apiSuccess (Code 200) {String} data.attributes.owner          owner of the file
+ * @apiSuccess (Code 200) {Object} data.links                     links container
+ * @apiSuccess (Code 200) {String} data.links.self                resource link
+ * @apiSuccess (Code 200) {String} data.links.owner               link to the owner of the file
+ *
  * @apiSuccessExample {json} Success-Finish:
  * 		HTTP/1.1 200 OK
  * 		{
@@ -35,6 +51,7 @@ const ROUTE_NAME = 'info';
  * 				"type": "file",
  * 				"id": "49058df9-983e-43b6-8755-84b92c272357",
  * 				"attributes": {
+ * 				  "name": "my extremely interesting model",
  * 					"startedAt": "1448363306185",
  * 					"status": "pending",
  * 					"contentType": "application/cappasity-3d",
@@ -43,7 +60,8 @@ const ROUTE_NAME = 'info';
  * 					"owner": "xxx@example.com"
  * 				},
  * 				"links": {
- * 					"self": "https://api-sandbox.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357"
+ * 					"self": "https://api-sandbox.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357",
+ * 					"owner": "https://api-sandbox.cappacity.matic.ninja/api/users/xxx%40example.com"
  * 				}
  * 			}
  * 		}

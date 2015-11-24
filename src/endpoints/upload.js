@@ -21,6 +21,7 @@ const ROUTE_NAME = 'upload';
  * @apiParam (Body) {Object} data                                 data container
  * @apiParam (Body) {String="file"} data.type                     data type, must be "file"
  * @apiParam (Body) {Object} data.attributes                      data attributes container
+ * @apiParam (Body) {String} data.attributes.name                 custom name of the file for the user
  * @apiParam (Body) {String} data.attributes.md5Hash              md5 checksum of the file to be uploaded
  * @apiParam (Body) {String} data.attributes.contentType          content-type of the file to be uploaded
  * @apiParam (Body) {String} data.attributes.contentLength        content-length of the file to be uploaded
