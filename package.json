@@ -22,8 +22,9 @@
     "debug": "^2.2.0",
     "glob": "^6.0.1",
     "lodash": "^3.10.1",
+    "mm-lodash": "^1.2.5",
     "ms-users-restify": "^0.4.0",
-    "restify-utils": "^0.1.9"
+    "restify-utils": "^0.1.12"
   },
   "devDependencies": {
     "babel": "^5.8.34",

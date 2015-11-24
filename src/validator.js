@@ -1,5 +1,3 @@
-const Validator = require('ms-amqp-validation');
-const validator = new Validator();
-validator.init('../schemas', false, true);
+const Validator = require('ms-validation');
 
-module.exports = validator;
+module.exports = new Validator('../schemas', null, { removeAdditional: true });

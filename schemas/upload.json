@@ -1,4 +1,5 @@
 {
+  "id": "upload",
   "type": "object",
   "additionalProperties": false,
   "required": [ "data" ],
