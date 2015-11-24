@@ -12,7 +12,7 @@ const ROUTE_NAME = 'finish';
  *
  * @apiDescription Sets status of the file to uploaded and puts it into post-processing queue. Returns location of the file
  * and code 202. It means that file had been pushed to post processing queue, but still not available for download. Client should
- * poll status of this file in order to find out when it's ready
+ * poll status of this file in order to find out when it's ready. 412 error will be returned until it's available for download
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:
@@ -52,8 +52,8 @@ exports.post = {
 
           return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
         })
-        .then(result => {
-          res.setHeader('Location', config.host + config.attachPoint + '/' + result.filename);
+        .then(fileData => {
+          res.setHeader('Location', config.host + config.attachPoint + '/' + fileData.filename);
           res.send(202);
         })
         .asCallback(next);
