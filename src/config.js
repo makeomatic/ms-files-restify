@@ -5,7 +5,7 @@ const users = require('ms-users-restify');
  * Default configuration object
  * @type {Object}
  */
-const config = {
+const config = module.exports = {
   users: {},
   files: {
     prefix: 'files',
@@ -22,12 +22,10 @@ const config = {
 };
 
 /**
- * Returns configuration object
+ * Returns configuration instance
  * @return {Object}
  */
-exports.get = function returnConfigurationObject() {
-  return config;
-};
+module.exports = exports = config;
 
 /**
  * Reconfigures instance
