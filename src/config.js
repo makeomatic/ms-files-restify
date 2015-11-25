@@ -6,6 +6,7 @@ const users = require('ms-users-restify');
  * @type {Object}
  */
 const config = {
+  users: {},
   files: {
     prefix: 'files',
     postfix: {
