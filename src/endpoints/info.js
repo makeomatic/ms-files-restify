@@ -66,7 +66,7 @@ const ROUTE_NAME = 'info';
  * 			}
  * 		}
  */
-exports.post = {
+exports.get = {
   path: '/',
   middleware: [ 'auth' ],
   handlers: {

@@ -92,7 +92,7 @@ ld.mixin(require('mm-lodash'));
  * 			}
  * 		}
  */
-exports.post = {
+exports.get = {
   path: '/',
   middleware: [ 'auth' ],
   handlers: {

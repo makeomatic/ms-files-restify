@@ -39,7 +39,7 @@ const ROUTE_NAME = 'finish';
  * 		HTTP/1.1 202 Accepted
  * 		Location: https://api-sandbix.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357"
  */
-exports.post = {
+exports.patch = {
   path: '/',
   middleware: [ 'auth' ],
   handlers: {
