@@ -84,8 +84,9 @@ exports.post = {
           const metadataRoute = [ usersConfig.prefix, usersConfig.postfix.updateMetadata ].join('.');
           const username = user.id;
           const message = Object.assign({ id: username }, attributes);
+          const models = user.attributes.models || 0;
 
-          if (user.attributes.models < 1) {
+          if (models < 1 && !user.isAdmin()) {
             throw new Errors.HttpStatusError(402, 'no more models are available');
           }
 
@@ -94,12 +95,12 @@ exports.post = {
             audience,
             metadata: {
               $incr: {
-                models: -1,
+                models: user.isAdmin() ? 0 : -1,
               },
             },
           }, { timeout: 5000 })
           .then(result => {
-            if (result.$incr.models < 0) {
+            if (result.$incr.models < 0 && !user.isAdmin()) {
               throw new Errors.HttpStatusError(402, 'no more models are available');
             }
 
