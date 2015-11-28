@@ -1,4 +1,3 @@
-const validator = require('../validator.js');
 const config = require('../config.js');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'info';
@@ -67,18 +66,14 @@ const ROUTE_NAME = 'info';
  * 		}
  */
 exports.get = {
-  path: '/',
+  path: '/:filename',
   middleware: [ 'auth' ],
   handlers: {
     '1.0.0': function completeResumableUpload(req, res, next) {
-      return validator
-        .validate(ROUTE_NAME, req.body)
-        .then(body => {
-          const { filename } = body.params;
-          const message = { filename, username: req.user.id };
+      const { filename } = req.params;
+      const message = { filename, username: req.user.id };
 
-          return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
-        })
+      return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
         .then(fileData => {
           res.send(config.models.File.transform(fileData, true));
         })
