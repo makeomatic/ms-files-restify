@@ -66,12 +66,15 @@ const ROUTE_NAME = 'info';
  * 		}
  */
 exports.get = {
-  path: '/:filename',
+  paths: [ '/:filename', '/:username/:filename' ],
   middleware: [ 'auth' ],
   handlers: {
     '1.0.0': function completeResumableUpload(req, res, next) {
-      const { filename } = req.params;
-      const message = { filename, username: req.user.id };
+      const { filename, username } = req.params;
+      const message = {
+        filename: username ? `${username}/${filename}` : filename,
+        username: req.user.id,
+      };
 
       return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
         .then(fileData => {
