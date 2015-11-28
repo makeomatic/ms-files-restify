@@ -3,7 +3,7 @@ const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
 /**
- * @api {get} /download/:filename Initiates new file upload
+ * @api {get} /download/:filename Download provided file
  * @apiVersion 1.0.0
  * @apiName DownloadFile
  * @apiGroup Files
@@ -22,9 +22,10 @@ const ROUTE_NAME = 'download';
  *     -H "Authorization: JWT therealtokenhere" \
  *     "https://api-sandbox.cappacity.matic.ninja/api/files/download/49058df9-983e-43b6-8755-84b92c272357"
  *
- * @apiUse UserAuthResponse
  * @apiUse ValidationError
- * @apiUse PaymentRequiredError
+ * @apiUse ForbiddenResponse
+ * @apiUse UnauthorizedError
+ * @apiUse FileNotFoundError
  * @apiUse PreconditionFailedError
  *
  * @apiSuccessExample {json} Success-Download:
@@ -32,13 +33,13 @@ const ROUTE_NAME = 'download';
  * 		Location: https://storage.googleapis.com/bucket-name/username/49058df9-983e-43b6-8755-84b92c272357?GoogleAccessId=xxx&expires=231283612781232&signature=xxx
  */
 exports.get = {
-  paths: [ '/download/:filename', '/download/:username/:filename' ],
+  path: '/download/:filename',
   middleware: [ 'auth' ],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
-      const { filename, username } = req.params;
+      const { filename } = req.params;
       const message = {
-        filename: username ? `${username}/${filename}` : filename,
+        filename: decodeURIComponent(filename),
         username: req.user.id,
       };
 

@@ -23,7 +23,9 @@ const ROUTE_NAME = 'info';
  *     -H "Authorization: JWT therealtokenhere" \
  *     "https://api-sandbox.cappacity.matic.ninja/api/files/info/49058df9-983e-43b6-8755-84b92c272357" | gunzip
  *
- * @apiUse UserAuthResponse
+ * @apiUse ForbiddenResponse
+ * @apiUse UnauthorizedError
+ * @apiUse FileNotFoundError
  *
  * @apiSuccess (Code 200) {Object} meta                           meta container
  * @apiSuccess (COde 200) {String} meta.id                        request id
@@ -49,7 +51,7 @@ const ROUTE_NAME = 'info';
  * 			},
  * 			"data": {
  * 				"type": "file",
- * 				"id": "49058df9-983e-43b6-8755-84b92c272357",
+ * 				"id": "xxx@example.com/49058df9-983e-43b6-8755-84b92c272357",
  * 				"attributes": {
  * 				  "name": "my extremely interesting model",
  * 					"startedAt": "1448363306185",
@@ -60,20 +62,20 @@ const ROUTE_NAME = 'info';
  * 					"owner": "xxx@example.com"
  * 				},
  * 				"links": {
- * 					"self": "https://api-sandbox.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357",
+ * 					"self": "https://api-sandbox.cappacity.matic.ninja/api/files/xxx%40example.com%2F49058df9-983e-43b6-8755-84b92c272357",
  * 					"owner": "https://api-sandbox.cappacity.matic.ninja/api/users/xxx%40example.com"
  * 				}
  * 			}
  * 		}
  */
 exports.get = {
-  paths: [ '/info/:filename', '/info/:username/:filename' ],
+  path: '/info/:filename',
   middleware: [ 'auth' ],
   handlers: {
     '1.0.0': function getFileInformation(req, res, next) {
-      const { filename, username } = req.params;
+      const { filename } = req.params;
       const message = {
-        filename: username ? `${username}/${filename}` : filename,
+        filename: decodeURIComponent(filename),
         username: req.user.id,
       };
 

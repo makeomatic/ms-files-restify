@@ -42,9 +42,9 @@ const ROUTE_NAME = 'upload';
  *       }
  *     }' | gunzip
  *
- * @apiUse UserAuthResponse
  * @apiUse ValidationError
  * @apiUse PaymentRequiredError
+ * @apiUse ForbiddenResponse
  *
  * @apiSuccess (Code 201) {Object} meta                           meta container
  * @apiSuccess (COde 201) {String} meta.id                        request id

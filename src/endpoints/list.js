@@ -27,7 +27,9 @@ ld.mixin(require('mm-lodash'));
  *     -H "Authorization: JWT therealtokenhere" \
  *     "https://api-sandbox.cappacity.matic.ninja/api/files" | gunzip
  *
+ * @apiUse ForbiddenResponse
  * @apiUse UnauthorizedError
+ * @apiUse FileNotFoundError
  * @apiUse ValidationError
  *
  * @apiParam (Query) {Number{0..}} [offset]         how many files to skip

@@ -32,8 +32,12 @@ const ROUTE_NAME = 'finish';
  *       }
  *     }' | gunzip
  *
- * @apiUse UserAuthResponse
+ * @apiUse FileNotFoundError
  * @apiUse ValidationError
+ * @apiUse ForbiddenResponse
+ * @apiUse UnauthorizedError
+ * @apiUse NotAllowedError
+ * @apiUse PreconditionFailedError
  *
  * @apiSuccessExample {json} Success-Finish:
  * 		HTTP/1.1 202 Accepted

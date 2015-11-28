@@ -128,6 +128,55 @@
  */
 
 /**
+ * @apiDefine FileNotFoundError
+ *
+ * @apiError (Code 404) {Object}    meta           response meta information
+ * @apiError (Code 404) {String}    meta.id        request id
+ * @apiError (Code 404) {Object[]}  errors         array of errors
+ * @apiError (Code 404) {String}    errors.status  text code of error
+ * @apiError (Code 404) {String}    errors.title   short error description
+ * @apiError (Code 404) {String}    errors.code    code of error
+ *
+ * @apiErrorExample {json} UserNotFoundError:
+ * 		HTTP/1.1 404 NotFound
+ * 		{
+ * 			"meta": {
+ * 				"id": "request-id"
+ * 			},
+ * 			"errors": [{
+ * 				"status": "HttpStatusError",
+ * 				"code": 404,
+ * 				"title": "file :filename was not found",
+ * 			}]
+ * 		}
+ */
+
+/**
+ * @apiDefine NotAllowedError
+ *
+ * @apiError (Code 405) {Object}    meta           response meta information
+ * @apiError (Code 405) {String}    meta.id        request id
+ * @apiError (Code 405) {Object[]}  errors         array of errors
+ * @apiError (Code 405) {String}    errors.status  text code of error
+ * @apiError (Code 405) {String}    errors.title   short error description
+ * @apiError (Code 405) {String}    errors.code    code of error
+ *
+ * @apiErrorExample {json} PreconditionFailedError:
+ * 		HTTP/1.1 405 Not Allowed
+ * 		{
+ * 			"meta": {
+ * 				"id": "request-id"
+ * 			},
+ * 			"errors": [{
+ * 				"status": "HttpStatusError",
+ * 				"code": 405,
+ * 				"title": "provider reports that upload was not finished yet",
+ * 			}]
+ * 		}
+ *
+ */
+
+/**
  * @apiDefine PreconditionFailedError
  *
  * @apiError (Code 412) {Object}    meta           response meta information
