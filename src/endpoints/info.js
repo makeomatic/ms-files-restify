@@ -3,13 +3,14 @@ const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'info';
 
 /**
- * @api {get} /:filename returns information about specific file
+ * @api {get} /info/:filename returns information about specific file
  * @apiVersion 1.0.0
  * @apiName GetInfo
  * @apiGroup Files
  * @apiPermission user
  *
- * @apiDescription Returns information about specific file that belongs to a user. When status is `processed` - it can be downloaded
+ * @apiDescription Returns information about specific file that belongs to a user. When status is `processed` - it can be downloaded. Filename includes username
+ * prefix when attached to an owner
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:
@@ -20,7 +21,7 @@ const ROUTE_NAME = 'info';
  * @apiExample {curl} Example usage:
  *   curl -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357" | gunzip
+ *     "https://api-sandbox.cappacity.matic.ninja/api/files/info/49058df9-983e-43b6-8755-84b92c272357" | gunzip
  *
  * @apiUse UserAuthResponse
  *

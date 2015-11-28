@@ -3,7 +3,7 @@ const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
 /**
- * @api {get} /:filename Initiates new file upload
+ * @api {get} /download/:filename Initiates new file upload
  * @apiVersion 1.0.0
  * @apiName DownloadFile
  * @apiGroup Files
@@ -20,7 +20,7 @@ const ROUTE_NAME = 'download';
  * @apiExample {curl} Example usage:
  *   curl -i -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357"
+ *     "https://api-sandbox.cappacity.matic.ninja/api/files/download/49058df9-983e-43b6-8755-84b92c272357"
  *
  * @apiUse UserAuthResponse
  * @apiUse ValidationError
@@ -36,14 +36,13 @@ exports.get = {
   middleware: [ 'auth' ],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
-      const { filename } = req.params;
-      const { amqp } = req;
+      const { filename, username } = req.params;
       const message = {
-        filename,
+        filename: username ? `${username}/${filename}` : filename,
         username: req.user.id,
       };
 
-      return amqp
+      return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
         .then(signedURL => {
           res.setHeader('Location', signedURL);
