@@ -22,8 +22,6 @@ ld.mixin(require('mm-lodash'));
  * @apiHeaderExample Authorization-Example:
  * 		"Authorization: JWT myreallyniceandvalidjsonwebtoken"
  *
- * @apiParam (Query) {String}
- *
  * @apiExample {curl} Example usage:
  *   curl -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
  *     -H "Authorization: JWT therealtokenhere" \
