@@ -152,7 +152,9 @@ exports.get = {
         }
 
         const { File } = config.models;
-        res.send(answer.files.map(File.transform, File));
+        res.send(answer.files.map(function transformFile(fileData) {
+          return File.transform(fileData, true);
+        }));
       })
       .asCallback(next);
     },
