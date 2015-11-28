@@ -66,7 +66,7 @@ const ROUTE_NAME = 'info';
  * 		}
  */
 exports.get = {
-  paths: [ '/:filename', '/:username/:filename' ],
+  paths: [ '/info/:filename', '/info/:username/:filename' ],
   middleware: [ 'auth' ],
   handlers: {
     '1.0.0': function completeResumableUpload(req, res, next) {

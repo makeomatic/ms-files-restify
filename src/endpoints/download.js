@@ -32,7 +32,7 @@ const ROUTE_NAME = 'download';
  * 		Location: https://storage.googleapis.com/bucket-name/username/49058df9-983e-43b6-8755-84b92c272357?GoogleAccessId=xxx&expires=231283612781232&signature=xxx
  */
 exports.get = {
-  path: '/:filename',
+  paths: [ '/download/:filename', '/download/:username/:filename' ],
   middleware: [ 'auth' ],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
