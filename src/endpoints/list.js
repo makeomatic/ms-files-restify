@@ -100,6 +100,8 @@ exports.get = {
       let owner;
       if (!req.user.isAdmin()) {
         owner = req.user.id;
+      } else if (req.query.hasOwnProperty('own')) {
+        owner = req.query.owner || req.user.id;
       }
 
       return Promise.try(function verifyRights() {
