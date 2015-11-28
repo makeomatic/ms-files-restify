@@ -10,7 +10,7 @@ const ROUTE_NAME = 'info';
  * @apiPermission user
  *
  * @apiDescription Returns information about specific file that belongs to a user. When status is `processed` - it can be downloaded. Filename includes username
- * prefix when attached to an owner
+ * prefix when attached to an owner. Make sure that when you insert :filename, it's processed by `encodeURIComponent`
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:

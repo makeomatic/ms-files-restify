@@ -9,7 +9,7 @@ const ROUTE_NAME = 'download';
  * @apiGroup Files
  * @apiPermission user
  *
- * @apiDescription Returns signed URL that can be used to download file
+ * @apiDescription Returns signed URL that can be used to download file. Make sure that when you insert :filename, it's processed by `encodeURIComponent`
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:
@@ -20,7 +20,7 @@ const ROUTE_NAME = 'download';
  * @apiExample {curl} Example usage:
  *   curl -i -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files/download/49058df9-983e-43b6-8755-84b92c272357"
+ *     "https://api-sandbox.cappacity.matic.ninja/api/files/download/v%40example.com%2F49058df9-983e-43b6-8755-84b92c272357"
  *
  * @apiUse ValidationError
  * @apiUse ForbiddenResponse
