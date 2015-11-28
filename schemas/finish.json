@@ -7,7 +7,7 @@
     "data": {
       "additionalProperties": false,
       "type": "object",
-      "required": [ "attributes", "id" ],
+      "required": [ "type", "id" ],
       "properties": {
         "type": {
           "type": "string",
