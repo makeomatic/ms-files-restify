@@ -69,7 +69,7 @@ exports.get = {
   paths: [ '/info/:filename', '/info/:username/:filename' ],
   middleware: [ 'auth' ],
   handlers: {
-    '1.0.0': function completeResumableUpload(req, res, next) {
+    '1.0.0': function getFileInformation(req, res, next) {
       const { filename, username } = req.params;
       const message = {
         filename: username ? `${username}/${filename}` : filename,
