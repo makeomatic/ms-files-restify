@@ -53,7 +53,7 @@ exports.patch = {
           return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
         })
         .then(fileData => {
-          res.setHeader('Location', config.host + config.attachPoint + '/' + fileData.filename);
+          res.setHeader('Location', config.host + config.files.attachPoint + '/' + fileData.filename);
           res.send(202);
         })
         .asCallback(next);
