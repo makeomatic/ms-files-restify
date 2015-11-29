@@ -5,6 +5,7 @@ const ld = require('lodash').runInContext();
 const { stringify: qs } = require('querystring');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'list';
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 // adds all mixins
 ld.mixin(require('mm-lodash'));
@@ -100,7 +101,7 @@ exports.get = {
       let owner;
       if (!req.user.isAdmin()) {
         owner = req.user.id;
-      } else if (req.query.hasOwnProperty('own')) {
+      } else if (hasOwnProperty.call(req.query, 'own')) {
         owner = req.query.owner || req.user.id;
       }
 
