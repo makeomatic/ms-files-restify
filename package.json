@@ -1,6 +1,6 @@
 {
   "name": "ms-files-restify",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {
@@ -24,11 +24,11 @@
     "glob": "^6.0.1",
     "lodash": "^3.10.1",
     "mm-lodash": "^1.2.5",
-    "restify-utils": "^0.3.5",
     "urlsafe-base64": "^1.0.0"
   },
   "peerDependencies": {
-    "ms-users-restify": "^0.5.10"
+    "ms-users-restify": "^0.5.10",
+    "restify-utils": "^0.3.5"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
