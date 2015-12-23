@@ -45,7 +45,7 @@ const ROUTE_NAME = 'finish';
  */
 exports.patch = {
   path: '/',
-  middleware: [ 'auth' ],
+  middleware: ['auth'],
   handlers: {
     '1.0.0': function completeResumableUpload(req, res, next) {
       return validator
@@ -53,6 +53,10 @@ exports.patch = {
         .then(body => {
           const { id } = body.data;
           const message = { id, username: req.user.id };
+
+          if (req.user.isAdmin()) {
+            message.skipProcessing = req.query.skipProcessing === 'true';
+          }
 
           return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
         })
