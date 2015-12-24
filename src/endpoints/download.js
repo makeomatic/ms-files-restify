@@ -1,7 +1,6 @@
 const config = require('../config.js');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
-const base64 = require('urlsafe-base64');
 
 /**
  * @api {get} /download/:filename Download provided file
@@ -38,7 +37,7 @@ const base64 = require('urlsafe-base64');
  */
 exports.get = {
   path: '/download/:filename',
-  middleware: [ 'auth' ],
+  middleware: ['auth'],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
       const { filename } = req.params;
@@ -66,7 +65,7 @@ exports.get = {
           }
 
           if (checksum) {
-            res.setHeader('X-Content-MD5', base64.encode(new Buffer(data.checksum, 'hex')));
+            res.setHeader('X-Content-MD5', data.checksum);
           }
 
           res.setHeader('Location', url);
