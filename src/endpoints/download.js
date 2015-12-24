@@ -58,7 +58,7 @@ exports.get = {
             // start right after preview
             const modelStart = previewLastByte + 1;
             // preview + length - 1
-            const modelStop = modelStart + parseInt(previewSize, 10) - 1;
+            const modelStop = modelStart + parseInt(modelSize, 10) - 1;
 
             res.setHeader('X-Content-Preview', `bytes=4-${previewLastByte}`);
             res.setHeader('X-Content', `bytes=${modelStart}-${modelStop}`);
