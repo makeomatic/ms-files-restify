@@ -1,7 +1,6 @@
 const config = require('../config.js');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
-const base64 = require('urlsafe-base64');
 
 /**
  * @api {get} /download/:filename Download provided file
@@ -59,14 +58,14 @@ exports.get = {
             // start right after preview
             const modelStart = previewLastByte + 1;
             // preview + length - 1
-            const modelStop = modelStart + parseInt(previewSize, 10) - 1;
+            const modelStop = modelStart + parseInt(modelSize, 10) - 1;
 
             res.setHeader('X-Content-Preview', `bytes=4-${previewLastByte}`);
             res.setHeader('X-Content', `bytes=${modelStart}-${modelStop}`);
           }
 
           if (checksum) {
-            res.setHeader('X-Content-MD5', base64.encode(new Buffer(data.checksum, 'hex')));
+            res.setHeader('X-Content-MD5', data.checksum);
           }
 
           res.setHeader('Location', url);
