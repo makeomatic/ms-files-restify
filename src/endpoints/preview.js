@@ -17,6 +17,7 @@ const pump = require('pump');
  * @apiDescription Returns optimized image with provided modifiers that is supposed to be cached by CDN
  *
  * @apiParam (Params) {String} filename
+ * @apiParam (Params) {String} format: png, jpeg, jpg, webp
  * @apiParam (Params) {String} modifiers:
  * 															* Supported modifiers are: *
  *                              * height:       eg. h500

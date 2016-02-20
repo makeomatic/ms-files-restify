@@ -38,7 +38,7 @@ const base64 = require('urlsafe-base64');
  */
 exports.get = {
   path: '/download/:filename',
-  middleware: [ 'auth' ],
+  middleware: ['auth'],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
       const { filename } = req.params;
