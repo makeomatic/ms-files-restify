@@ -95,6 +95,11 @@ exports.get = {
           // internal format parsing is quite hard and may miss actual filename
           image.outputFormat = format || 'png';
 
+          if (typeof res.handledGzip === 'function') {
+            res.handledGzip();
+            res.removeHeader('Content-Encoding');
+          }
+
           return Promise.fromNode(done => {
             pump(
               image.getFile(),
