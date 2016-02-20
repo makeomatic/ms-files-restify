@@ -1,11 +1,16 @@
-const config = require('../config.js');
-const { getRoute, getTimeout } = config;
-const ROUTE_NAME = 'info';
+const Promise = require('bluebird');
 const Errors = require('common-errors');
 const ir = require('image-resizer-wjordan');
+const config = require('../config.js');
+const pump = require('pump');
+const compact = require('lodash/compact');
+
+const { getRoute, getTimeout } = config;
 const { img: Img, streams } = ir;
 const { identify: Identify, resize: Resize, filter: Filter, optimize: Optimize, restify: Restify } = streams;
-const pump = require('pump');
+
+// amqp route
+const ROUTE_NAME = 'info';
 
 /**
  * @api {get} /preview/(:modifiers)/:filename(.:format) Get preview of a provided file
@@ -47,22 +52,35 @@ const pump = require('pump');
 
 const modifiers = '(?:(?:[hwscyxq][1-9][0-9]*|[cgf][a-z]+)-?){1,9}';
 const imagePath = '([^\\/]+)';
-const format = '(\\.(?:png|jpe?g|wepb))';
+const ALLOWED_FORMATS = Img.validOutputFormats;
 
 exports.get = {
   // /:modifers/path/to/image.format:metadata
-  path: `(${modifiers}\\/)?${imagePath}${format}?$`,
+  path: `(${modifiers}\\/)?${imagePath}`,
   regexp: function initPath(prefix, family, path) {
-    return new RegExp(`^\\/${prefix}\\/${family}\\/preview\\/${path}`);
+    // prefix starts with /
+    return new RegExp(`^\\${prefix}\\/${family}\\/preview\\/${path}$`);
   },
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
-      const message = {
-        filename: decodeURIComponent(req.params[1]),
-      };
+      let filename = req.params[1];
+      const mod = req.params[0];
+      const parts = filename.split('.');
+      let format = parts.pop();
+
+      if (ALLOWED_FORMATS.indexOf(format) >= 0) {
+        filename = parts.join('.');
+      } else {
+        format = false;
+      }
+
+      // if it crashes, we are still wrapped in a catcher
+      filename = decodeURIComponent(filename);
+
+      const path = compact([mod, filename]).join('/');
 
       return req.amqp
-        .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
+        .publishAndWait(getRoute(ROUTE_NAME), { filename }, { timeout: getTimeout(ROUTE_NAME) })
         .then(fileData => {
           const { previewSize } = fileData;
 
@@ -72,7 +90,10 @@ exports.get = {
 
           const previewLastByte = 3 + parseInt(previewSize, 10);
           const options = { start: 4, end: previewLastByte };
-          const image = new Img(req, options);
+          const image = new Img({ ...req, path }, options);
+
+          // internal format parsing is quite hard and may miss actual filename
+          image.outputFormat = format || 'png';
 
           return Promise.fromNode(done => {
             pump(
