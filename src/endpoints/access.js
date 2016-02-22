@@ -4,7 +4,7 @@ const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'access';
 
 /**
- * @api {put} /access - changes access to a given file
+ * @api {put} /access Changes access to a given file
  * @apiVersion 1.0.0
  * @apiName ChangeAccess
  * @apiGroup Files
