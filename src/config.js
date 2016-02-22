@@ -17,6 +17,7 @@ const config = module.exports = {
       finish: 'finish',
       process: 'process',
       list: 'list',
+      access: 'access',
     },
     timeouts: {},
   },
@@ -48,5 +49,5 @@ exports.getTimeout = function getTimeout(route) {
  */
 exports.getRoute = function getRoute(route) {
   const files = config.files;
-  return [files.prefix, files.postfix[route]].join('.');
+  return [files.prefix, files.postfix[route] || route].join('.');
 };
