@@ -71,7 +71,7 @@ const ROUTE_NAME = 'upload';
  */
 exports.post = {
   path: '/',
-  middleware: [ 'auth' ],
+  middleware: ['auth'],
   handlers: {
     '1.0.0': function initResumableUpload(req, res, next) {
       return validator
@@ -81,9 +81,9 @@ exports.post = {
           const attributes = body.data.attributes;
           const usersConfig = config.users;
           const { audience } = usersConfig;
-          const metadataRoute = [ usersConfig.prefix, usersConfig.postfix.updateMetadata ].join('.');
+          const metadataRoute = [usersConfig.prefix, usersConfig.postfix.updateMetadata].join('.');
           const username = user.id;
-          const message = Object.assign({ id: username }, attributes);
+          const message = { ...attributes, id: username };
           const models = user.attributes.models || 0;
 
           if (models < 1 && !user.isAdmin()) {

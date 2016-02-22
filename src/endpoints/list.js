@@ -22,7 +22,7 @@ ld.mixin(require('mm-lodash'));
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:
- * 		"Authorization: JWT myreallyniceandvalidjsonwebtoken"
+ *     "Authorization: JWT myreallyniceandvalidjsonwebtoken"
  *
  * @apiExample {curl} Example usage:
  *   curl -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
@@ -36,9 +36,10 @@ ld.mixin(require('mm-lodash'));
  *
  * @apiParam (Query) {Number{0..}} [offset]         how many files to skip
  * @apiParam (Query) {Number{1..100}} [limit]       how many files to return per page
- * @apiParam (Query) {String} [filter]              `encodeURIComponent(JSON.stringify(filterObject))`, pass it as value. `#` - filters by filename, other keys - by allowed
- * 																		          		metadata
- * @apiParam (Query) {String} [sortBy]              `encodeURIComponent(sortBy)`, if not specified, sorts by createdAt, otherwise by metadata field passed here
+ * @apiParam (Query) {String} [filter]              `encodeURIComponent(JSON.stringify(filterObject))`, pass it as value.
+ *                                                   `#` - filters by filename, other keys - by allowed metadata
+ * @apiParam (Query) {String} [sortBy]              `encodeURIComponent(sortBy)`, if not specified, sorts by
+ *                                                   createdAt, otherwise by metadata field passed here
  * @apiParam (Query) {String="ASC","DESC"} [order]  sorting order, defaults to "ASC", case-insensitive
  *
  * @apiSuccess (Code 200) {Object}   meta                           response meta information
@@ -64,49 +65,49 @@ ld.mixin(require('mm-lodash'));
  * @apiSuccess (Code 200) {String}   links.next                     link to the next page
  *
  * @apiSuccessExample {json} Success-Finish:
- * 		HTTP/1.1 200 OK
- * 		{
- * 			"meta": {
- * 				"id": "request-id",
- * 				"page": 3,
- * 				"pages": 3,
- * 				"cursor": 31
- * 			},
- * 			"data": [{
- * 				"type": "file",
- * 				"id": "49058df9-983e-43b6-8755-84b92c272357",
- * 				"attributes": {
- * 					"startedAt": "1448363306185",
- * 					"status": "pending",
- * 					"contentType": "application/cappasity-3d",
- * 					"contentLength": 132718274182,
- * 					"md5Hash": "52dd9e7bbdef6ac7d345888c17fa5848",
- * 					"owner": "xxx@example.com"
- * 				},
- * 				"links": {
- * 					"self": "https://api-sandbox.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357",
- * 					"owner": "https://api-sandbox.cappacity.matic.ninja/api/users/xxx%40example.com"
- * 				}
- * 			}],
- * 			"links": {
- * 			  "self": "https://api-sandbox.cappacity.matic.ninja/api/files?offset=0&limit=10&order=DESC",
- * 			  "next": "https://api-sandbox.cappacity.matic.ninja/api/files?offset=11&limit=10&order=DESC"
- * 			}
- * 		}
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "meta": {
+ *         "id": "request-id",
+ *         "page": 3,
+ *         "pages": 3,
+ *         "cursor": 31
+ *       },
+ *       "data": [{
+ *         "type": "file",
+ *         "id": "49058df9-983e-43b6-8755-84b92c272357",
+ *         "attributes": {
+ *           "startedAt": "1448363306185",
+ *           "status": "pending",
+ *           "contentType": "application/cappasity-3d",
+ *           "contentLength": 132718274182,
+ *           "md5Hash": "52dd9e7bbdef6ac7d345888c17fa5848",
+ *           "owner": "xxx@example.com"
+ *         },
+ *         "links": {
+ *           "self": "https://api-sandbox.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357",
+ *           "owner": "https://api-sandbox.cappacity.matic.ninja/api/users/xxx%40example.com"
+ *         }
+ *       }],
+ *       "links": {
+ *         "self": "https://api-sandbox.cappacity.matic.ninja/api/files?offset=0&limit=10&order=DESC",
+ *         "next": "https://api-sandbox.cappacity.matic.ninja/api/files?offset=11&limit=10&order=DESC"
+ *       }
+ *     }
  */
 exports.get = {
   path: '/',
-  middleware: [ 'auth' ],
+  middleware: ['auth'],
   handlers: {
     '1.0.0': function listFiles(req, res, next) {
-      let owner;
-      if (!req.user.isAdmin()) {
-        owner = req.user.id;
-      } else if (hasOwnProperty.call(req.query, 'own')) {
-        owner = req.query.owner || req.user.id;
-      }
+      // admin can choose, use forced to public
+      const isPublic = req.user.isAdmin() ? hasOwnProperty.call(req.query, 'pub') : false;
 
-      return Promise.try(function verifyRights() {
+      // this is now something everyone can use
+      const owner = hasOwnProperty.call(req.query, 'owner') ? req.query.owner : null;
+
+      return Promise
+      .try(function completeFilter() {
         const { order, filter, offset, limit, sortBy } = req.query;
         const parsedFilter = filter && JSON.parse(decodeURIComponent(filter)) || undefined;
         return ld.compactObject({
@@ -115,6 +116,7 @@ exports.get = {
           limit: limit && +limit || 10,
           filter: parsedFilter || {},
           criteria: sortBy && decodeURIComponent(sortBy) || undefined,
+          public: isPublic,
           owner,
         });
       })
@@ -150,7 +152,7 @@ exports.get = {
         };
 
         if (page < pages) {
-          const nextQS = Object.assign({}, selfQS, { offset: cursor });
+          const nextQS = { ...selfQS, offset: cursor };
           res.meta.cursor = cursor;
           res.links.next = `${base}?${qs(nextQS)}`;
         }
