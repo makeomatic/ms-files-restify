@@ -25,7 +25,7 @@ const ROUTE_NAME = 'access';
  * @apiExample {curl} Example usage:
  *   curl -X PUT -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files" -d '{
+ *     "https://api-sandbox.cappacity.matic.ninja/api/files/access" -d '{
  *       "data": {
  *         "type": "file",
  *         "id": "v@example.com/very-nice-file-id",
