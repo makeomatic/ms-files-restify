@@ -79,6 +79,9 @@ exports.get = {
             throw new HttpStatusError(404, 'could not find associated data');
           }
 
+          // substitute real owner with alias
+          fileData.owner = alias;
+
           res.send(config.models.File.transform(fileData, true, true));
           return false;
         })
