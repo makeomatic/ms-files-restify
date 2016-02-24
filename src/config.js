@@ -18,6 +18,7 @@ const config = module.exports = {
       process: 'process',
       list: 'list',
       access: 'access',
+      get: 'get',
     },
     timeouts: {},
   },
