@@ -1,3 +1,4 @@
+const { HttpStatusError } = require('common-errors');
 const config = require('../config.js');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'get';
@@ -70,7 +71,14 @@ exports.get = {
 
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
+        .catch({ code: 403 }, () => {
+          throw new HttpStatusError(404, 'could not find associated data');
+        })
         .then(fileData => {
+          if (!fileData.public) {
+            throw new HttpStatusError(404, 'could not find associated data');
+          }
+
           res.send(config.models.File.transform(fileData, true, true));
           return false;
         })
