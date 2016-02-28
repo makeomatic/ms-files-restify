@@ -6,7 +6,6 @@ const ld = require('lodash').runInContext();
 const { stringify: qs } = require('querystring');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'list';
-const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 // adds all mixins
 ld.mixin(require('mm-lodash'));
@@ -100,15 +99,27 @@ exports.get = {
   middleware: ['auth'],
   handlers: {
     '1.0.0': function listFiles(req, res, next) {
-      // admin can choose, use forced to public
-      const isPublic = req.user.isAdmin() ? hasOwnProperty.call(req.query, 'pub') : false;
+      const isAdmin = req.user.isAdmin();
+      const alias = req.user.attributes.alias;
+      const id = req.user.id;
+      const qOwner = req.query.owner;
+      const qPub = req.query.pub;
 
-      // this is now something everyone can use
-      const owner = hasOwnProperty.call(req.query, 'owner') ? req.query.owner : null;
+      let isPublic;
+      let owner;
+      if (isAdmin || (alias && qOwner === alias) || qOwner === id) {
+        // define public or not
+        isPublic = qPub ? Boolean(+qPub) : undefined;
+        // define whether filter by owner or not
+        owner = qOwner || undefined;
+      } else {
+        isPublic = true;
+        owner = qOwner || alias || id;
+      }
 
       return Promise
       .try(function completeFilter() {
-        const { order, filter, offset, limit, sortBy } = req.query;
+        const { query: { order, filter, offset, limit, sortBy } } = req;
         const parsedFilter = filter && JSON.parse(decodeURIComponent(filter)) || undefined;
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
@@ -142,6 +153,8 @@ exports.get = {
           offset: offset || 0,
           sortBy,
           filter: encodeURIComponent(JSON.stringify(filter)),
+          pub: isPublic,
+          owner,
         };
 
         res.meta = { page, pages };
