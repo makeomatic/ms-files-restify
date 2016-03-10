@@ -55,7 +55,7 @@ const url = require('url');
  * }
  */
 
-module.exports = function authenticateUser(req, res, next) {
+module.exports = function gceWebhook(req, res, next) {
   const headers = req.headers;
   const gce = config.gce;
 
