@@ -36,7 +36,7 @@ const ROUTE_NAME = 'upload';
  * @apiExample {curl} Example usage:
  *   curl -X POST -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files" -d '{
+ *     "https://api-sandbox-dev.matic.ninja/api/files" -d '{
  *       "data": {
  *         "type": "upload",
  *         "attributes": {
@@ -73,7 +73,7 @@ const ROUTE_NAME = 'upload';
  * @apiUse ForbiddenResponse
  *
  * @apiSuccess (Code 201) {Object} meta                           meta container
- * @apiSuccess (COde 201) {String} meta.id                        request id
+ * @apiSuccess (Code 201) {String} meta.id                        request id
  * @apiSuccess (Code 201) {Object} data                           data container
  * @apiSuccess (Code 201) {String} data.type                      "upload"
  * @apiSuccess (Code 201) {String} data.id                        upload id

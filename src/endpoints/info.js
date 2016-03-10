@@ -15,15 +15,10 @@ const ROUTE_NAME = 'info';
  * When status is `processed` - it can be downloaded. Filename includes username
  * prefix when attached to an owner. Make sure that when you insert :filename, it's processed by `encodeURIComponent`
  *
- * @apiHeader (Authorization) {String} Authorization JWT :accessToken
- * @apiHeaderExample Authorization-Example:
- *     "Authorization: JWT myreallyniceandvalidjsonwebtoken"
- *
  * @apiParam (Params) {String} filename      name of the file
  *
  * @apiExample {curl} Example usage:
  *   curl -H 'Accept: application/vnd.api+json' \
- *     -H "Authorization: JWT therealtokenhere" \
  *     "https://api-sandbox-dev.matic.ninja/api/files/info/bamboo/49058df9-983e-43b6-8755-84b92c272357"
  *
  * @apiUse FileNotFoundError

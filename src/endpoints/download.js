@@ -8,19 +8,14 @@ const ROUTE_NAME = 'download';
  * @apiVersion 1.0.0
  * @apiName DownloadFile
  * @apiGroup Files
- * @apiPermission user
+ * @apiPermission none
  *
  * @apiDescription Returns signed URL that can be used to download file. If file is public - returns direct URLs
- *
- * @apiHeader (Authorization) {String} Authorization JWT :accessToken
- * @apiHeaderExample Authorization-Example:
- *     "Authorization: JWT myreallyniceandvalidjsonwebtoken"
  *
  * @apiParam (Params) {String} filename
  *
  * @apiExample {curl} Example usage:
  *   curl -H 'Accept: application/vnd.api+json' \
- *     -H "Authorization: JWT therealtokenhere" \
  *     "https://api-sandbox-dev.matic.ninja/api/files/download/9058df9-983e-43b6-8755-84b92c272357"
  *
  * @apiUse FileNotFoundError

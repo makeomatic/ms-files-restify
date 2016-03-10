@@ -22,7 +22,7 @@ const ROUTE_NAME = 'info';
  * @apiDescription Returns optimized image with provided modifiers that is supposed to be cached by CDN
  *
  * @apiParam (Params) {String} filename
- * @apiParam (Params) {String} format: png, jpeg, jpg, webp
+ * @apiParam (Params) {String} format: png, jpeg, webp
  * @apiParam (Params) {String} modifiers:
  *       height:       eg. h500
  *      width:        eg. w200
@@ -37,9 +37,7 @@ const ROUTE_NAME = 'info';
  *
  *
  * @apiExample {curl} Example usage:
- *   curl -i -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
- *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox-dev.matic.ninja/api/files/preview/bamboo/h200-w200-cfill/3c69b6f9-02db-4057-8b36-91c19e6ee43f.jpeg"
+ *   curl "https://api-sandbox-dev.matic.ninja/api/files/preview/bamboo/h200-w200-cfill/3c69b6f9-02db-4057-8b36-91c19e6ee43f.jpeg"
  *
  * @apiUse ValidationError
  * @apiUse FileNotFoundError

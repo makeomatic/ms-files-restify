@@ -15,18 +15,14 @@ ld.mixin(require('mm-lodash'));
  * @apiVersion 1.0.0
  * @apiName GetFilesList
  * @apiGroup Files
- * @apiPermission user
+ * @apiPermission none
  *
  * @apiDescription Returns list of files
  *
- * @apiHeader (Authorization) {String} Authorization JWT :accessToken
- * @apiHeaderExample Authorization-Example:
- *     "Authorization: JWT myreallyniceandvalidjsonwebtoken"
- *
  * @apiExample {curl} Example usage:
- *   curl -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
+ *   curl -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files" | gunzip
+ *     "https://api-sandbox-dev.matic.ninja/api/files"
  *
  * @apiUse ForbiddenResponse
  * @apiUse UnauthorizedError
@@ -144,18 +140,22 @@ ld.mixin(require('mm-lodash'));
  */
 exports.get = {
   path: '/',
-  middleware: ['auth'],
+  middleware: ['conditional-auth'],
   handlers: {
     '1.0.0': function listFiles(req, res, next) {
-      const isAdmin = req.user.isAdmin();
-      const alias = req.user.attributes.alias;
-      const id = req.user.id;
+      const user = req.user;
+      const isAdmin = user && user.isAdmin();
+      const alias = user && user.attributes.alias;
+      const id = user && user.id;
       const qOwner = req.query.owner;
       const qPub = req.query.pub;
 
       let isPublic;
       let owner;
-      if (isAdmin || (alias && qOwner === alias) || qOwner === id) {
+      if (!user) {
+        isPublic = true;
+        owner = undefined;
+      } else if (isAdmin || (alias && qOwner === alias) || qOwner === id) {
         // define public or not
         isPublic = qPub ? Boolean(+qPub) : undefined;
         // define whether filter by owner or not
@@ -177,7 +177,7 @@ exports.get = {
           offset: offset && +offset || undefined,
           limit: limit && +limit || 10,
           filter: parsedFilter || {},
-          criteria: sortBy && decodeURIComponent(sortBy) || undefined,
+          criteria: sortBy || undefined,
           public: isPublic,
           owner,
         });
