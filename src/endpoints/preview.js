@@ -13,7 +13,7 @@ const { identify: Identify, resize: Resize, filter: Filter, optimize: Optimize, 
 const ROUTE_NAME = 'info';
 
 /**
- * @api {get} /preview/(:modifiers)/:filename(.:format) Get preview of a provided file
+ * @api {get} /preview/:alias/(:modifiers)/:filename(.:format) Get preview of a provided file
  * @apiVersion 1.0.0
  * @apiName PreviewFile
  * @apiGroup Files
@@ -39,7 +39,7 @@ const ROUTE_NAME = 'info';
  * @apiExample {curl} Example usage:
  *   curl -i -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox-dev.matic.ninja/api/files/preview/h200-w200-cfill/really-nice-path-to-image.png"
+ *     "https://api-sandbox-dev.matic.ninja/api/files/preview/bamboo/h200-w200-cfill/3c69b6f9-02db-4057-8b36-91c19e6ee43f.jpeg"
  *
  * @apiUse ValidationError
  * @apiUse FileNotFoundError
