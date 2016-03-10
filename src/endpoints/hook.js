@@ -27,7 +27,7 @@ exports.post = {
         return next(false);
       }
 
-      const message = { filename: req.file.name };
+      const message = req.file;
 
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })

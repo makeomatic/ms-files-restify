@@ -70,10 +70,6 @@ module.exports = function authenticateUser(req, res, next) {
     return next(new Errors.HttpStatusError(403, 'invalid channel'));
   }
 
-  if (resourceId !== gce.resourceId) {
-    return next(new Errors.HttpStatusError(403, 'invalid resource id'));
-  }
-
   if (token !== gce.token) {
     return next(new Errors.HttpStatusError(403, 'invalid token'));
   }
@@ -92,7 +88,8 @@ module.exports = function authenticateUser(req, res, next) {
   // add/delete notifications
   req.file = {
     action,
-    name: req.body.name,
+    resourceId,
+    filename: req.body.name,
   };
 
   return next();

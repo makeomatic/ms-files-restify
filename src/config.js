@@ -25,7 +25,6 @@ const config = module.exports = {
       bucket: '',
       token: '',
       channel: '',
-      resourceId: '',
     },
   },
 };
