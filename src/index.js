@@ -2,7 +2,7 @@ const utils = require('restify-utils');
 const path = require('path');
 const config = require('./config.js');
 const users = require('ms-users-restify');
-const assign = require('lodash/assign');
+const defaults = require('lodash/defaults');
 
 // generate attach function
 const attach = module.exports = utils.attach(
@@ -12,7 +12,7 @@ const attach = module.exports = utils.attach(
 );
 
 // reference user's middleware as we want to reuse it
-attach.middleware = assign({}, users.middleware, attach.middleware);
+defaults(attach.middleware, users.middleware);
 
 // expose reconfiguration
 attach.reconfigure = config.reconfigure;
