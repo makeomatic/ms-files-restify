@@ -1,6 +1,6 @@
 {
   "name": "ms-files-restify",
-  "version": "0.10.0-rc6",
+  "version": "0.10.0-rc8",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {
@@ -46,9 +46,9 @@
     "eslint-plugin-mocha": "^2.0.0",
     "json": "^9.0.3",
     "mocha": "^2.4.5",
-    "ms-users-restify": "^0.7.0",
+    "ms-users-restify": "^0.10.0",
     "ms-validation": "^1.1.0",
-    "restify-utils": "^0.7.0"
+    "restify-utils": "^0.10.0"
   },
   "apidoc": {
     "version": "1.0.0",
