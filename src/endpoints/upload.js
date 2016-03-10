@@ -1,6 +1,6 @@
-const Errors = require('common-errors');
 const validator = require('../validator.js');
 const config = require('../config.js');
+const map = require('lodash/map');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'upload';
 
@@ -16,34 +16,60 @@ const ROUTE_NAME = 'upload';
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:
- * 		"Authorization: JWT myreallyniceandvalidjsonwebtoken"
+ *     "Authorization: JWT myreallyniceandvalidjsonwebtoken"
  *
- * @apiParam (Body) {Object} data                                 data container
- * @apiParam (Body) {String="file"} data.type                     data type, must be "file"
- * @apiParam (Body) {Object} data.attributes                      data attributes container
- * @apiParam (Body) {String} data.attributes.name                 custom name of the file for the user
- * @apiParam (Body) {String} data.attributes.md5Hash              md5 checksum of the file to be uploaded
- * @apiParam (Body) {String} data.attributes.contentType          content-type of the file to be uploaded
- * @apiParam (Body) {String} data.attributes.contentLength        content-length of the file to be uploaded
- * @apiParam (Body) {String} [data.attributes.contentEncodning]   optional content-encoding, for instance "gzip"
+ * @apiParam (Body) {Object} data                                           data container
+ * @apiParam (Body) {String="upload"} data.type                             data type, must be "upload"
+ * @apiParam (Body) {Object} data.attributes                                data attributes container
+ * @apiParam (Body) {Object} data.attributes.meta                           custom name of the file
+ * @apiParam (Body) {String} data.attributes.meta.name                      custom name of the file
+ * @apiParam (Body) {String} data.attributes.meta.description               file description
+ * @apiParam (Body) {String} data.attributes.meta.website                   some link for a given file
+ * @apiParam (Body) {Object[]} data.attributes.files                        array of file objects
+ * @apiParam (Body) {Number} data.attributes.files.contentLength            size of file in bytes
+ * @apiParam (Body) {String="c-bin","с-texture","c-preview"}                data.attributes.files.type type
+ * @apiParam (Body) {String} data.attributes.files.contentLength            file size
+ * @apiParam (Body) {String="application/octet-stream","image/jpeg"}        data.attributes.files.contentType file content type
+ * @apiParam (Body) {String="gzip"} [data.attributes.files.contentEncoding] encoding of the file
+ * @apiParam (Body) {String} data.attributes.files.md5Hash                  checksum
  *
  * @apiExample {curl} Example usage:
  *   curl -X POST -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
  *     -H "Authorization: JWT therealtokenhere" \
  *     "https://api-sandbox.cappacity.matic.ninja/api/files" -d '{
  *       "data": {
- *         "type": "file",
+ *         "type": "upload",
  *         "attributes": {
- *           "md5Hash": "52dd9e7bbdef6ac7d345888c17fa5848",
- *           "contentType": "application/cappasity-model",
- *           "contentEncoding": "gzip",
- *           "contentLength": 124612827
+ *           "meta": {
+ *             "name": "banana model",
+ *             "description": "the best banana in the world",
+ *             "website": "https://banana.com"
+ *           },
+ *           "files": [
+ *             {
+ *               "type": "c-bin",
+ *               "contentLength": 12317289,
+ *               "contentType": "application/octet-stream",
+ *               "md5Hash": "c8837b23ff8aaa8a2dde915473ce0991"
+ *             },
+ *             {
+ *               "type": "c-texture",
+ *               "contentLength": 13123,
+ *               "contentType": "image/jpeg",
+ *               "md5Hash": "dcf62199cada2bc7f3d58199d5c52283"
+ *             },
+ *             {
+ *               "type": "c-preview",
+ *               "contentLength": 2174189,
+ *               "contentType": "image/jpeg",
+ *               "md5Hash": "b667d77d36ebcdc33a6c87e09897b589"
+ *             }
+ *           ]
  *         }
  *       }
- *     }' | gunzip
+ *     }'
  *
  * @apiUse ValidationError
- * @apiUse PaymentRequiredError
  * @apiUse ForbiddenResponse
  *
  * @apiSuccess (Code 201) {Object} meta                           meta container
@@ -55,19 +81,29 @@ const ROUTE_NAME = 'upload';
  * @apiSuccess (Code 201) {String} data.links.self                resource link
  *
  * @apiSuccessExample {json} Success-Upload:
- * 		HTTP/1.1 201 OK
- * 		{
- * 			"meta": {
- * 				"id": "request-id",
- * 			},
- * 			"data": {
- * 				"type": "upload",
- * 				"id": "dasjka0aA_1231287",
- * 				"links": {
- * 					"self": "https://www.googleapis.com/upload/storage/v1/b/myBucket/o?uploadType=resumable&upload_id=dasjka0aA_1231287"
- * 				}
- * 			}
- * 		}
+ *     HTTP/1.1 201 OK
+ *     {
+ *       "meta": {
+ *         "id": "request-id",
+ *       },
+ *       "data": {
+ *         "type": "upload",
+ *         "id": "fdce4a1c-a094-41e3-98b1-2e92cc1a7c27",
+ *         "attributes": {
+ *           "uploadId": "",
+ *           // some metadata
+ *           "files": [
+ *             // array of object with filenames
+ *           ]
+ *         },
+ *         "links": [
+ *           "https://www.googleapis.com/upload/storage/v1/b/myBucket/o?uploadType=resumable&upload_id=dasjka0aA_1231287",
+ *           "https://www.googleapis.com/upload/storage/v1/b/myBucket/o?uploadType=resumable&upload_id=dasjka0aA_1231287",
+ *           "https://www.googleapis.com/upload/storage/v1/b/myBucket/o?uploadType=resumable&upload_id=dasjka0aA_1231287",
+ *           "https://www.googleapis.com/upload/storage/v1/b/myBucket/o?uploadType=resumable&upload_id=dasjka0aA_1231287"
+ *         ]
+ *       }
+ *     }
  */
 exports.post = {
   path: '/',
@@ -79,46 +115,18 @@ exports.post = {
         .then(body => {
           const { amqp, user } = req;
           const attributes = body.data.attributes;
-          const usersConfig = config.users;
-          const { audience } = usersConfig;
-          const metadataRoute = [usersConfig.prefix, usersConfig.postfix.updateMetadata].join('.');
           const username = user.id;
           const message = { ...attributes, id: username };
-          const models = user.attributes.models || 0;
 
-          if (models < 1 && !user.isAdmin()) {
-            throw new Errors.HttpStatusError(402, 'no more models are available');
-          }
-
-          return amqp.publishAndWait(metadataRoute, {
-            username,
-            audience,
-            metadata: {
-              $incr: {
-                models: user.isAdmin() ? 0 : -1,
-              },
-            },
-          }, { timeout: 5000 })
-          .then(result => {
-            if (result.$incr.models < 0 && !user.isAdmin()) {
-              throw new Errors.HttpStatusError(402, 'no more models are available');
-            }
-
-            return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
-          })
-          .catch({ code: 402 }, function refundBackToZero(err) {
-            return amqp
-              .publishAndWait(metadataRoute, { username, audience, metadata: { $incr: { models: 1 } } }, { timeout: 10000 })
-              .throw(err);
-          });
+          return amqp
+            .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
         })
         .then(result => {
           res.send(201, {
             type: 'upload',
             id: result.uploadId,
-            links: {
-              self: result.location,
-            },
+            attributes: result,
+            links: map(result.files, 'location'),
           });
         })
         .asCallback(next);

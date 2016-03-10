@@ -24,17 +24,16 @@ const ROUTE_NAME = 'info';
  * @apiParam (Params) {String} filename
  * @apiParam (Params) {String} format: png, jpeg, jpg, webp
  * @apiParam (Params) {String} modifiers:
- * 															* Supported modifiers are: *
- *                              * height:       eg. h500
- *                              * width:        eg. w200
- *                              * square:       eg. s50
- *                              * crop:         eg. cfill
- *                              * top:          eg. y12
- *                              * left:         eg. x200
- *                              * gravity:      eg. gs, gne
- *                              * filter:       eg. fsepia
- *                              * external:     eg. efacebook
- *                              * quality:      eg. q90
+ *   		height:       eg. h500
+ *      width:        eg. w200
+ *      square:       eg. s50
+ *      crop:         eg. cfill
+ *      top:          eg. y12
+ *      left:         eg. x200
+ *      gravity:      eg. gs, gne
+ *      filter:       eg. fsepia
+ *      external:     eg. efacebook
+ *      quality:      eg. q90
  *
  *
  * @apiExample {curl} Example usage:
@@ -50,50 +49,49 @@ const ROUTE_NAME = 'info';
  * 		binarycontentofimage
  */
 
-const modifiers = '(?:(?:[hwscyxq][1-9][0-9]*|[cgf][a-z]+)-?){1,9}';
-const imagePath = '([^\\/]+)';
+const modRegExp = /(?:(?:[hwscyxq][1-9][0-9]*|[cgf][a-z]+)-?){1,9}/;
 const ALLOWED_FORMATS = Img.validOutputFormats;
 
 exports.get = {
-  // /:modifers/path/to/image.format:metadata
-  path: `(${modifiers}\\/)?${imagePath}`,
-  regexp: function initPath(prefix, family, path) {
-    // prefix starts with /
-    return new RegExp(`^\\${prefix}\\/${family}\\/preview\\/${path}$`);
-  },
+  paths: [
+    '/preview/:alias/:modifiers/:filename',
+    '/preview/:alias/:filename',
+  ],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
-      let filename = req.params[1];
-      const mod = req.params[0];
+      const { params } = req;
+      const { alias, modifiers } = params;
+      let { filename } = params;
+
+      if (modifiers && !modRegExp.test(modifiers)) {
+        throw new Errors.HttpStatusError(400, 'invalid modifiers');
+      }
+
       const parts = filename.split('.');
       let format = parts.pop();
-
       if (ALLOWED_FORMATS.indexOf(format) >= 0) {
         filename = parts.join('.');
       } else {
-        format = false;
+        format = 'jpeg';
       }
 
       // if it crashes, we are still wrapped in a catcher
       filename = decodeURIComponent(filename);
-
-      const path = compact([mod, filename]).join('/');
+      const path = compact([modifiers, filename]).join('/');
 
       return req.amqp
-        .publishAndWait(getRoute(ROUTE_NAME), { filename }, { timeout: getTimeout(ROUTE_NAME) })
+        .publishAndWait(getRoute(ROUTE_NAME), { filename, username: alias }, { timeout: getTimeout(ROUTE_NAME) })
         .then(fileData => {
-          const { previewSize } = fileData;
+          const { preview } = fileData;
 
-          if (!previewSize) {
+          if (!preview) {
             throw new Errors.HttpStatusError(412, 'preview was not extracted yet');
           }
 
-          const previewLastByte = 3 + parseInt(previewSize, 10);
-          const options = { start: 4, end: previewLastByte };
-          const image = new Img({ ...req, path }, options);
+          const image = new Img({ ...req, path });
 
           // internal format parsing is quite hard and may miss actual filename
-          image.outputFormat = format || 'png';
+          image.outputFormat = format;
 
           if (typeof res.handledGzip === 'function') {
             res.handledGzip();

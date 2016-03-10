@@ -11,7 +11,8 @@
       "properties": {
         "id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 36,
+          "maxLength": 36
         },
         "type": {
           "type": "string",

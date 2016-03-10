@@ -25,10 +25,10 @@ const ROUTE_NAME = 'access';
  * @apiExample {curl} Example usage:
  *   curl -X PUT -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files/access" -d '{
+ *     "https://api-sandbox-dev.matic.ninja/api/files/access" -d '{
  *       "data": {
  *         "type": "file",
- *         "id": "v@example.com/very-nice-file-id",
+ *         "id": "3c69b6f9-02db-4057-8b36-91c19e6ee43f",
  *         "attributes": {
  *            "public": true
  *         }
@@ -50,12 +50,12 @@ exports.put = {
     '1.0.0': function adjustAccess(req, res, next) {
       return validator
         .validate(ROUTE_NAME, req.body)
-        .then(({ data }) => {
-          const { id, attributes: { public: setPublic } } = data;
+        .then(body => {
+          const { data: { id, attributes: { public: setPublic } } } = body;
           const message = {
             filename: id,
             setPublic,
-            owner: req.user.id,
+            username: req.user.id,
           };
 
           return req

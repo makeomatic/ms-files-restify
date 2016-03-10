@@ -21,6 +21,12 @@ const config = module.exports = {
       get: 'get',
     },
     timeouts: {},
+    gce: {
+      bucket: '',
+      token: '',
+      channel: '',
+      resourceId: '',
+    },
   },
 };
 

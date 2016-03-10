@@ -1,4 +1,3 @@
-const validator = require('../validator.js');
 const config = require('../config.js');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'finish';
@@ -16,7 +15,7 @@ const ROUTE_NAME = 'finish';
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:
- * 		"Authorization: JWT myreallyniceandvalidjsonwebtoken"
+ *     "Authorization: JWT myreallyniceandvalidjsonwebtoken"
  *
  * @apiParam (Body) {Object} data                         data container
  * @apiParam (Body) {String="upload"} data.type           data type, must be "upload"
@@ -30,7 +29,7 @@ const ROUTE_NAME = 'finish';
  *         "type": "upload",
  *         "id": "asd142asas_127x3d18"
  *       }
- *     }' | gunzip
+ *     }'
  *
  * @apiUse FileNotFoundError
  * @apiUse ValidationError
@@ -40,29 +39,29 @@ const ROUTE_NAME = 'finish';
  * @apiUse PreconditionFailedError
  *
  * @apiSuccessExample {json} Success-Finish:
- * 		HTTP/1.1 202 Accepted
- * 		Location: https://api-sandbix.cappacity.matic.ninja/api/files/49058df9-983e-43b6-8755-84b92c272357"
+ *     HTTP/1.1 202 Accepted
  */
-exports.patch = {
-  path: '/',
-  middleware: ['auth'],
+exports.post = {
+  path: '/gce',
+  middleware: ['gce'],
   handlers: {
     '1.0.0': function completeResumableUpload(req, res, next) {
-      return validator
-        .validate(ROUTE_NAME, req.body)
-        .then(body => {
-          const { id } = body.data;
-          const message = { id, username: req.user.id };
+      // we do not process delete actions at this point
+      if (req.file.action === 'not_exists') {
+        res.send(200);
+        return next(false);
+      }
 
-          if (req.user.isAdmin()) {
-            message.skipProcessing = req.query.skipProcessing === 'true';
-          }
+      const message = { filename: req.file.name };
 
-          return req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
-        })
-        .then(fileData => {
-          res.setHeader('Location', config.host + config.files.attachPoint + '/' + fileData.filename);
-          res.send(202);
+      return req.amqp
+        .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
+        .then(() => 'OK')
+        .catch({ code: 202 }, err => `202: ${err.message}`)
+        .catch({ code: 412 }, err => `412: ${err.message}`)
+        .then(msg => {
+          res.send(202, msg);
+          return false;
         })
         .asCallback(next);
     },

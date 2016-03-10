@@ -1,4 +1,5 @@
 const config = require('../config.js');
+const get = require('lodash/get');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
@@ -9,67 +10,95 @@ const ROUTE_NAME = 'download';
  * @apiGroup Files
  * @apiPermission user
  *
- * @apiDescription Returns signed URL that can be used to download file. Make sure that when you insert :filename, it's processed by `encodeURIComponent`
+ * @apiDescription Returns signed URL that can be used to download file. If file is public - returns direct URLs
  *
  * @apiHeader (Authorization) {String} Authorization JWT :accessToken
  * @apiHeaderExample Authorization-Example:
- * 		"Authorization: JWT myreallyniceandvalidjsonwebtoken"
+ *     "Authorization: JWT myreallyniceandvalidjsonwebtoken"
  *
  * @apiParam (Params) {String} filename
  *
  * @apiExample {curl} Example usage:
- *   curl -i -H 'Accept-Version: *' -H 'Accept: application/vnd.api+json' -H 'Accept-Encoding: gzip, deflate' \
+ *   curl -H 'Accept: application/vnd.api+json' \
  *     -H "Authorization: JWT therealtokenhere" \
- *     "https://api-sandbox.cappacity.matic.ninja/api/files/download/v%40example.com%2F49058df9-983e-43b6-8755-84b92c272357"
+ *     "https://api-sandbox-dev.matic.ninja/api/files/download/9058df9-983e-43b6-8755-84b92c272357"
  *
- * @apiUse ValidationError
- * @apiUse ForbiddenResponse
- * @apiUse UnauthorizedError
  * @apiUse FileNotFoundError
  * @apiUse PreconditionFailedError
  *
  * @apiSuccessExample {json} Success-Download:
- * 		HTTP/1.1 302 Moved Temporarily
- * 		X-Content-Preview: 4-xxxx
- * 		X-Content: yyyy-zzzz
- * 		X-Content-MD5: base64(md5Hash)
- * 		Location: https://storage.googleapis.com/bucket-name/username/49058df9-983e-43b6-8755-84b92c272357?GoogleAccessId=xxx&expires=231283612781232&signature=xxx
+ *     HTTP/1.1 200 OK
+ *     {
+ *     		"meta": {
+ *     			"id": "request-id"
+ *     		},
+ *     		"data": {
+ *     			"type": "download",
+ *     			"id": "9058df9-983e-43b6-8755-84b92c272357",
+ *     			"attributes": {
+ *     				"files": [
+ *             {
+ *               "filename": "202cb962ac59075b964b07152d234b70/49058df9-983e-43b6-8755-84b92c272357/88467680-d86d-4ea2-8c07-c9bd984736b1.bin.gz",
+ *               "type": "c-bin",
+ *               "contentType": "application/octet-stream",
+ *               "contentEncoding": "gzip",
+ *               "contentLength": 1327182741,
+ *               "md5Hash": "c8837b23ff8aaa8a2dde915473ce0991"
+ *             },
+ *             {
+ *               "filename": "202cb962ac59075b964b07152d234b70/49058df9-983e-43b6-8755-84b92c272357/fdce4a1c-a094-41e3-98b1-2e92cc1a7c27.jpg",
+ *               "type": "c-texture",
+ *               "contentType": "image/jpeg",
+ *               "contentLength": 412412,
+ *               "md5Hash": "d8c37b23ff8aaa8a2dde915473ce0991"
+ *             },
+ *             {
+ *               "filename": "202cb962ac59075b964b07152d234b70/49058df9-983e-43b6-8755-84b92c272357/3c69b6f9-02db-4057-8b36-91c19e6ee43f.jpg",
+ *               "type": "c-texture",
+ *               "contentType": "image/jpeg",
+ *               "contentLength": 432423,
+ *               "md5Hash": "c8837b23ff8acd8a2dde915473ce0991"
+ *             },
+ *             {
+ *               "filename": "202cb962ac59075b964b07152d234b70/49058df9-983e-43b6-8755-84b92c272357/6f91c1f3-4c17-43b6-9f50-26a08df56f3d.jpg",
+ *               "type": "c-preview",
+ *               "contentType": "image/jpeg",
+ *               "contentLength": 489179,
+ *               "md5Hash": "c8832b13ff8aaa8a2dde915473ce0991"
+ *             }
+ *     				],
+ *     				"urls": [
+ *     					// corresponding URLs for files
+ *     				]
+ *     			}
+ *     		}
+ *     }
  */
 exports.get = {
   path: '/download/:filename',
-  middleware: ['auth'],
+  middleware: ['conditional-auth'],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
       const { filename } = req.params;
-      const message = {
-        filename: decodeURIComponent(filename),
-        username: req.user.id,
-      };
+      const message = { filename };
+
+      // setup username
+      const username = get(req, 'user.id');
+      if (username) {
+        message.username = username;
+      }
 
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-        .then(({ url, data }) => {
-          const { checksum, previewSize, modelSize } = data;
-
-          if (previewSize && modelSize) {
-            // inclusive bytes, starts on 5th byte, 0 - 1st byte, 3 - 4th byte
-            // lastByte = (4 - 1) + length
-            const previewLastByte = 3 + parseInt(previewSize, 10);
-            // start right after preview
-            const modelStart = previewLastByte + 1;
-            // preview + length - 1
-            const modelStop = modelStart + parseInt(modelSize, 10) - 1;
-
-            res.setHeader('X-Content-Preview', `bytes=4-${previewLastByte}`);
-            res.setHeader('X-Content', `bytes=${modelStart}-${modelStop}`);
-          }
-
-          if (checksum) {
-            res.setHeader('X-Content-MD5', data.checksum);
-          }
-
-          res.setHeader('Location', url);
-          res.send(302);
+        .then(data => {
+          res.send(200, {
+            type: 'download',
+            id: data.uploadId,
+            attributes: {
+              files: data.files,
+              urls: data.urls,
+            },
+          });
           return false;
         })
         .asCallback(next);
