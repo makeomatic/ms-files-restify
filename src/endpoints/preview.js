@@ -24,7 +24,7 @@ const ROUTE_NAME = 'info';
  * @apiParam (Params) {String} filename
  * @apiParam (Params) {String} format: png, jpeg, jpg, webp
  * @apiParam (Params) {String} modifiers:
- *   		height:       eg. h500
+ *       height:       eg. h500
  *      width:        eg. w200
  *      square:       eg. s50
  *      crop:         eg. cfill
@@ -45,8 +45,8 @@ const ROUTE_NAME = 'info';
  * @apiUse FileNotFoundError
  *
  * @apiSuccessExample {json} Success-Download:
- * 		HTTP/1.1 200 OK
- * 		binarycontentofimage
+ *     HTTP/1.1 200 OK
+ *     binarycontentofimage
  */
 
 const modRegExp = /(?:(?:[hwscyxq][1-9][0-9]*|[cgf][a-z]+)-?){1,9}/;

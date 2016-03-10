@@ -29,14 +29,14 @@ const ROUTE_NAME = 'download';
  * @apiSuccessExample {json} Success-Download:
  *     HTTP/1.1 200 OK
  *     {
- *     		"meta": {
- *     			"id": "request-id"
- *     		},
- *     		"data": {
- *     			"type": "download",
- *     			"id": "9058df9-983e-43b6-8755-84b92c272357",
- *     			"attributes": {
- *     				"files": [
+ *         "meta": {
+ *           "id": "request-id"
+ *         },
+ *         "data": {
+ *           "type": "download",
+ *           "id": "9058df9-983e-43b6-8755-84b92c272357",
+ *           "attributes": {
+ *             "files": [
  *             {
  *               "filename": "202cb962ac59075b964b07152d234b70/49058df9-983e-43b6-8755-84b92c272357/88467680-d86d-4ea2-8c07-c9bd984736b1.bin.gz",
  *               "type": "c-bin",
@@ -66,12 +66,12 @@ const ROUTE_NAME = 'download';
  *               "contentLength": 489179,
  *               "md5Hash": "c8832b13ff8aaa8a2dde915473ce0991"
  *             }
- *     				],
- *     				"urls": [
- *     					// corresponding URLs for files
- *     				]
- *     			}
- *     		}
+ *             ],
+ *             "urls": [
+ *               // corresponding URLs for files
+ *             ]
+ *           }
+ *         }
  *     }
  */
 exports.get = {
