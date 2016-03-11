@@ -73,19 +73,15 @@ exports.get = {
         format = 'jpeg';
       }
 
-      // if it crashes, we are still wrapped in a catcher
-      filename = decodeURIComponent(filename);
-      const path = compact([modifiers, filename]).join('/');
-
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), { filename, username: alias }, { timeout: getTimeout(ROUTE_NAME) })
-        .then(fileData => {
-          const { preview } = fileData;
-
+        .then(data => {
+          const preview = data.file.preview;
           if (!preview) {
             throw new Errors.HttpStatusError(412, 'preview was not extracted yet');
           }
 
+          const path = compact([modifiers, preview]).join('/');
           const image = new Img({ ...req, path });
 
           // internal format parsing is quite hard and may miss actual filename

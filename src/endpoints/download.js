@@ -74,10 +74,10 @@ exports.get = {
   middleware: ['conditional-auth'],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
-      const { filename } = req.params;
-      const message = { filename };
+      // basic message
+      const message = { uploadId: req.params.filename };
 
-      // setup username
+      // if we are authenticated
       const username = get(req, 'user.id');
       if (username) {
         message.username = username;
