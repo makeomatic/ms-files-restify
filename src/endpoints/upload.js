@@ -116,7 +116,7 @@ exports.post = {
           const { amqp, user } = req;
           const attributes = body.data.attributes;
           const username = user.id;
-          const message = { ...attributes, id: username };
+          const message = { ...attributes, username };
 
           return amqp
             .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
