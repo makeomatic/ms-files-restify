@@ -57,7 +57,7 @@ const url = require('url');
 
 module.exports = function gceWebhook(req, res, next) {
   const headers = req.headers;
-  const gce = config.gce;
+  const gce = config.files.gce;
 
   // these are headers
   const channel = headers['x-goog-channel-id'];
