@@ -53,7 +53,7 @@ exports.put = {
         .then(body => {
           const { data: { id, attributes: { public: setPublic } } } = body;
           const message = {
-            filename: id,
+            uploadId: id,
             setPublic,
             username: req.user.id,
           };
