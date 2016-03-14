@@ -5,7 +5,7 @@ const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
 /**
- * @api {get} /:filename.json Download provided file
+ * @api {get} /:filename.json Get model meta info
  * @apiVersion 1.0.0
  * @apiName PlayerMeta
  * @apiGroup Files
@@ -27,6 +27,7 @@ const ROUTE_NAME = 'download';
  *     {
  *        "name": "Panda eating bamboo",
  *        "file": "https://cdn.google.com/path/to/file.bin.gz",
+ *        "size": 321792481,
  *        "materials": [
  *          {
  *            "texture": "https://cdn.google.com/path/to/texture.jpeg"
