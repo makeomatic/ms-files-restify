@@ -27,7 +27,7 @@ const ROUTE_NAME = 'upload';
  * @apiParam (Body) {String} data.attributes.meta.website                   some link for a given file
  * @apiParam (Body) {Object[]} data.attributes.files                        array of file objects
  * @apiParam (Body) {Number} data.attributes.files.contentLength            size of file in bytes
- * @apiParam (Body) {String="c-bin","с-texture","c-preview"}                data.attributes.files.type type
+ * @apiParam (Body) {String="c-bin","с-texture","c-preview","c-archive"}    data.attributes.files.type type
  * @apiParam (Body) {String} data.attributes.files.contentLength            file size
  * @apiParam (Body) {String="application/octet-stream","image/jpeg"}        data.attributes.files.contentType file content type
  * @apiParam (Body) {String="gzip"} [data.attributes.files.contentEncoding] encoding of the file
@@ -63,6 +63,12 @@ const ROUTE_NAME = 'upload';
  *               "contentLength": 2174189,
  *               "contentType": "image/jpeg",
  *               "md5Hash": "b667d77d36ebcdc33a6c87e09897b589"
+ *             },
+ *             {
+ *               "type": "c-archive",
+ *               "contentLength": 19917289,
+ *               "contentType": "application/cappasity-archive",
+ *               "md5Hash": "dcf62199c12345c7f3d58199d5c52283"
  *             }
  *           ]
  *         }
