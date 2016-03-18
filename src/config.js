@@ -19,6 +19,7 @@ const config = module.exports = {
       list: 'list',
       access: 'access',
       get: 'get',
+      update: 'update'
     },
     timeouts: {},
     gce: {
