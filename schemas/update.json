@@ -7,7 +7,7 @@
     "data": {
       "additionalProperties": false,
       "type": "object",
-      "required": [ "attributes"],
+      "required": [ "meta"],
       "properties": {
         "meta": {
           "type": "object",
@@ -29,9 +29,7 @@
               "format": "uri"
             },
             "tags": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 500
+              "type": "array"
             }
           }
         }
