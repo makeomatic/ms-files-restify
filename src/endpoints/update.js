@@ -15,7 +15,8 @@ exports.post = {
           const { amqp } = req;
           const { uploadId } = req.params;
           const { meta } = body.data;
-          const message = { meta, uploadId };
+          const isAdmin = req.user.isAdmin();
+          const message = { meta, uploadId, isAdmin };
           const username = get(req, 'user.id');
 
           if (username) {
