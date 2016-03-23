@@ -7,29 +7,51 @@
     "data": {
       "additionalProperties": false,
       "type": "object",
-      "required": [ "meta"],
+      "required": [ "attributes", "type" ],
       "properties": {
-        "meta": {
-          "type": "object",
+        "type": {
+          "type": "string",
+          "constant": "update"
+        },
+        "attributes": {
           "additionalProperties": false,
-          "required": ["name"],
+          "type": "object",
+          "required": [ "uploadId", "meta" ],
           "properties": {
-            "name": {
+            "uploadId": {
               "type": "string",
               "minLength": 1,
-              "maxLength": 150
+              "maxLength": 100
             },
-            "description": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 2000
-            },
-            "website": {
-              "type": "string",
-              "format": "uri"
-            },
-            "tags": {
-              "type": "array"
+            "meta": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "website": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "tags": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50
+                  }
+                }
+              }
             }
           }
         }
