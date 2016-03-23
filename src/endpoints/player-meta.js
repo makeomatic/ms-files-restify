@@ -4,6 +4,38 @@ const path = require('path');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
+// helper to generate JSON meta for player
+function generateJSON(amqp, filename, username) {
+  // basic message
+  const message = { uploadId: path.basename(filename, '.json') };
+
+  if (username) {
+    message.username = username;
+  }
+
+  return amqp
+    .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
+    .then(data => {
+      const { files, name, urls } = data;
+      const json = { name };
+      const materials = json.materials = [];
+
+      // create metadata file
+      files.forEach((file, idx) => {
+        const type = file.type;
+        if (type === 'c-texture') {
+          materials.push({ texture: urls[idx] });
+        } else if (type === 'c-bin') {
+          json.file = urls[idx];
+          json.size = file.contentLength;
+        }
+      });
+
+      return json;
+    });
+}
+exports.generateJSON = generateJSON;
+
 /**
  * @api {get} /:filename.json Get model meta info
  * @apiVersion 1.0.0
@@ -50,32 +82,9 @@ exports.get = {
         return next('route');
       }
 
-      // basic message
-      const message = { uploadId: path.basename(filename, '.json') };
-      // if we are authenticated
       const username = get(req, 'user.id');
-      if (username) {
-        message.username = username;
-      }
-
-      return req.amqp
-        .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-        .then(data => {
-          const { files, name, urls } = data;
-          const json = { name };
-          const materials = json.materials = [];
-
-          // create metadata file
-          files.forEach((file, idx) => {
-            const type = file.type;
-            if (type === 'c-texture') {
-              materials.push({ texture: urls[idx] });
-            } else if (type === 'c-bin') {
-              json.file = urls[idx];
-              json.size = file.contentLength;
-            }
-          });
-
+      return generateJSON(req.amqp, filename, username)
+        .then(json => {
           // TODO: add cache control
           res.contentType = 'application/json';
           res.send(json);
