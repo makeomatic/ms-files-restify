@@ -1,6 +1,6 @@
 {
   "name": "ms-files-restify",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {
@@ -54,6 +54,6 @@
     "version": "1.0.0",
     "name": "Files family documentation",
     "description": "Documentation for file-based actions",
-    "url": "https://api-users.sandbox.matic.ninja/api/files"
+    "url": "https://api-sandbox-dev.matic.ninja/api/files"
   }
 }
