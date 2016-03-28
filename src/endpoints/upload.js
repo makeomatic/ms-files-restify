@@ -25,6 +25,9 @@ const ROUTE_NAME = 'upload';
  * @apiParam (Body) {String} data.attributes.meta.name                      custom name of the file
  * @apiParam (Body) {String} data.attributes.meta.description               file description
  * @apiParam (Body) {String} data.attributes.meta.website                   some link for a given file
+ * @apiParam (Body) {String[]} data.attributes.meta.tags                    tags for a given model
+ * @apiParam (Body) {Object} [data.attributes.access]                       access data container
+ * @apiParam (Body) {Boolean} data.attributes.access.setPublic              if set to `true` will make model public on upload
  * @apiParam (Body) {Object[]} data.attributes.files                        array of file objects
  * @apiParam (Body) {Number} data.attributes.files.contentLength            size of file in bytes
  * @apiParam (Body) {String="c-bin","с-texture","c-preview","c-archive"}    data.attributes.files.type type
@@ -44,6 +47,9 @@ const ROUTE_NAME = 'upload';
  *             "name": "banana model",
  *             "description": "the best banana in the world",
  *             "website": "https://banana.com"
+ *           },
+ *           "access": {
+ *           	 "setPublic": true
  *           },
  *           "files": [
  *             {
