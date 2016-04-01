@@ -154,7 +154,7 @@ exports.get = {
       let owner;
       if (!user) {
         isPublic = true;
-        owner = undefined;
+        owner = qOwner || undefined;
       } else if (isAdmin || (alias && qOwner === alias) || qOwner === id) {
         // define public or not
         isPublic = qPub ? Boolean(+qPub) : undefined;
