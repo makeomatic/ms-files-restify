@@ -68,7 +68,7 @@ exports.patch = {
           const username = user.id;
 
           if (meta.tags) {
-            meta.tags = meta.tags.map(tag => tag.toLowerCase());
+            meta.tags = meta.tags.map(tag => tag.toLowerCase().trim());
           }
 
           if (username) {

@@ -128,7 +128,16 @@ exports.post = {
           const { amqp, user } = req;
           const attributes = body.data.attributes;
           const username = user.id;
-          const message = { ...attributes, username };
+          const message = {
+            ...attributes,
+            username,
+          };
+
+          // alter meta tags
+          const meta = message.meta;
+          if (meta.tags) {
+            meta.tags = meta.tags.map(tag => tag.toLowerCase().trim());
+          }
 
           return amqp
             .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
