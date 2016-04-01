@@ -3,7 +3,7 @@
   "definitions": {
     "tag": {
       "type": "string",
-      "pattern": "^[^,]{1, 20}$"
+      "pattern": "^[^,]{1,20}$"
     },
     "tags": {
       "type": "array",
