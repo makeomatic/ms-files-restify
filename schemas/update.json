@@ -7,26 +7,25 @@
     "data": {
       "additionalProperties": false,
       "type": "object",
-      "required": [ "attributes", "type" ],
+      "required": ["id", "type", "attributes"],
       "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 36,
+          "maxLength": 36
+        },
         "type": {
           "type": "string",
-          "constant": "update"
+          "constant": "file"
         },
         "attributes": {
           "additionalProperties": false,
           "type": "object",
-          "required": [ "uploadId", "meta" ],
+          "required": [ "meta" ],
           "properties": {
-            "uploadId": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100
-            },
             "meta": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["name"],
               "properties": {
                 "name": {
                   "type": "string",
