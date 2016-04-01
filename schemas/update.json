@@ -2,7 +2,7 @@
   "id": "update",
   "type": "object",
   "additionalProperties": false,
-  "required": [ "data" ],
+  "required": ["data"],
   "properties": {
     "data": {
       "additionalProperties": false,
@@ -21,7 +21,7 @@
         "attributes": {
           "additionalProperties": false,
           "type": "object",
-          "required": [ "meta" ],
+          "required": ["meta"],
           "properties": {
             "meta": {
               "type": "object",
@@ -29,30 +29,16 @@
               "minProperties": 1,
               "properties": {
                 "name": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 150
+                  "$ref": "common#/definitions/name"
                 },
                 "description": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 2000
+                  "$ref": "common#/definitions/description"
                 },
                 "website": {
-                  "type": "string",
-                  "format": "uri"
+                  "$ref": "common#/definitions/website"
                 },
                 "tags": {
-                  "type": "array",
-                  "minItems": 1,
-                  "maxItems": 20,
-                  "uniqueItems": true,
-                  "pattern": "^[^,]+$",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 50
-                  }
+                  "$ref": "common#/definitions/tags"
                 }
               }
             }

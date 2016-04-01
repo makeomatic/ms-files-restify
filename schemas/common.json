@@ -1,0 +1,31 @@
+{
+  "id": "common",
+  "definitions": {
+    "tag": {
+      "type": "string",
+      "pattern": "^[^,]{1, 20}$"
+    },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/definitions/tag"
+      }
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 75
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "website": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}
