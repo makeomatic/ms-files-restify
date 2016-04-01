@@ -67,6 +67,10 @@ exports.patch = {
           const message = { uploadId, meta };
           const username = user.id;
 
+          if (meta.tags) {
+            meta.tags = meta.tags.map(tag => tag.toLowerCase());
+          }
+
           if (username) {
             message.username = username;
           }
