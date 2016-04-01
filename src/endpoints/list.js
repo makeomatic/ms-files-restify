@@ -143,7 +143,7 @@ exports.get = {
   middleware: ['conditional-auth'],
   handlers: {
     '1.0.0': function listFiles(req, res, next) {
-      const user = req.user;
+      const user = req.user || false;
       const isAdmin = user && user.isAdmin();
       const alias = user && user.attributes.alias;
       const id = user && user.id;
@@ -204,7 +204,7 @@ exports.get = {
           offset: offset || 0,
           sortBy,
           filter: encodeURIComponent(JSON.stringify(filter)),
-          pub: isPublic,
+          pub: Number(isPublic),
           owner,
         };
 
