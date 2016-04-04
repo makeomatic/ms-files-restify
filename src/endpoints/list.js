@@ -37,6 +37,7 @@ ld.mixin(require('mm-lodash'));
  * @apiParam (Query) {String} [sortBy]              `encodeURIComponent(sortBy)`, if not specified, sorts by
  *                                                   createdAt, otherwise by metadata field passed here
  * @apiParam (Query) {String="ASC","DESC"} [order]  sorting order, defaults to "ASC", case-insensitive
+ * @apiParam (Query) {String} [tags]                `JSON.stringify(tags)`, tags that should be contained in files
  *
  * @apiSuccess (Code 200) {Object}   meta                           response meta information
  * @apiSuccess (Code 200) {String}   meta.id                        request id
@@ -170,7 +171,7 @@ exports.get = {
 
       return Promise
       .try(function completeFilter() {
-        const { query: { order, filter, offset, limit, sortBy } } = req;
+        const { query: { order, filter, offset, limit, sortBy, tags } } = req;
         const parsedFilter = filter && JSON.parse(decodeURIComponent(filter)) || undefined;
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
@@ -180,11 +181,13 @@ exports.get = {
           criteria: sortBy || undefined,
           public: isPublic,
           owner,
+          tags: JSON.parse(tags),
         });
       })
       .catch(function validationError(err) {
         req.log.error('input error', err);
-        throw new Errors.ValidationError('query.filter and query.sortBy must be uri encoded, and query.filter must be a valid JSON object', 400);
+        throw new Errors.ValidationError('query.filter and query.sortBy must be uri encoded, ' +
+          'query.filter must be a valid JSON object and query.tags must be a valid JSON array', 400);
       })
       .then(function validateMessage(message) {
         return validator.validate(ROUTE_NAME, message);
@@ -197,7 +200,7 @@ exports.get = {
       })
       .spread(function listResponse(answer, message) {
         const { page, pages, cursor } = answer;
-        const { order, filter, offset, limit, criteria: sortBy } = message;
+        const { order, filter, offset, limit, criteria: sortBy, tags } = message;
         const selfQS = {
           order,
           limit,
@@ -206,6 +209,7 @@ exports.get = {
           filter: encodeURIComponent(JSON.stringify(filter)),
           pub: Number(isPublic),
           owner,
+          tags: JSON.stringify(tags),
         };
 
         res.meta = { page, pages };
