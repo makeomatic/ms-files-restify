@@ -37,7 +37,8 @@ ld.mixin(require('mm-lodash'));
  * @apiParam (Query) {String} [sortBy]              `encodeURIComponent(sortBy)`, if not specified, sorts by
  *                                                   createdAt, otherwise by metadata field passed here
  * @apiParam (Query) {String="ASC","DESC"} [order]  sorting order, defaults to "ASC", case-insensitive
- * @apiParam (Query) {String} [tags]                `JSON.stringify(tags)`, tags that should be contained in files
+ * @apiParam (Query) {String} [tags]                `encodeURIComponent(JSON.stringify(tags))`,
+                                                    tags that should be contained in files
  *
  * @apiSuccess (Code 200) {Object}   meta                           response meta information
  * @apiSuccess (Code 200) {String}   meta.id                        request id
@@ -173,6 +174,7 @@ exports.get = {
       .try(function completeFilter() {
         const { query: { order, filter, offset, limit, sortBy, tags } } = req;
         const parsedFilter = filter && JSON.parse(decodeURIComponent(filter)) || undefined;
+        const parsedTags = tags && JSON.parse(decodeURIComponent(tags)) || undefined;
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
           offset: offset && +offset || undefined,
@@ -181,7 +183,7 @@ exports.get = {
           criteria: sortBy || undefined,
           public: isPublic,
           owner,
-          tags: JSON.parse(tags),
+          tags: parsedTags || [],
         });
       })
       .catch(function validationError(err) {
@@ -209,7 +211,7 @@ exports.get = {
           filter: encodeURIComponent(JSON.stringify(filter)),
           pub: Number(isPublic),
           owner,
-          tags: JSON.stringify(tags),
+          tags: encodeURIComponent(JSON.stringify(tags)),
         };
 
         res.meta = { page, pages };
