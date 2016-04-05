@@ -76,9 +76,9 @@
       "minItems": 1,
       "maxItems": 20,
       "uniqueItems": true,
-      "pattern": "^[^,]+$",
       "items": {
         "type": "string",
+        "pattern": "^[^,]+$",
         "minLength": 1,
         "maxLength": 50
       }
