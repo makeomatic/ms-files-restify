@@ -27,7 +27,7 @@ function generateJSON(amqp, filename, username) {
           materials.push({ texture: urls[idx] });
         } else if (type === 'c-bin') {
           json.file = urls[idx];
-          json.size = file.contentLength;
+          json.size = file.decompressedLength || file.contentLength;
         }
       });
 
