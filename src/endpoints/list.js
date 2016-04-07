@@ -177,13 +177,13 @@ exports.get = {
         const parsedTags = tags && JSON.parse(decodeURIComponent(tags)) || undefined;
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
+          owner,
           offset: offset && +offset || undefined,
           limit: limit && +limit || 10,
           filter: parsedFilter || {},
           criteria: sortBy || undefined,
           public: isPublic,
-          owner,
-          tags: parsedTags || [],
+          tags: parsedTags,
         });
       })
       .catch(function validationError(err) {
