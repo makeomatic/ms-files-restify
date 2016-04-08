@@ -50,6 +50,7 @@ ld.mixin(require('mm-lodash'));
  * @apiSuccess (Code 200) {String}   data.id                        filename, uuid.v4()
  * @apiSuccess (Code 200) {Object}   data.attributes                file attributes
  * @apiSuccess (Code 200) {String}   data.attributes.name           custom name of the file
+ * @apiSuccess (Code 200) {String[]} data.attributes.tags           file tags
  * @apiSuccess (Code 200) {String}   data.attributes.description    file description
  * @apiSuccess (Code 200) {String}   data.attributes.website        some link for a given file
  * @apiSuccess (Code 200) {Number}   data.attributes.startedAt      when file upload was started
@@ -174,7 +175,12 @@ exports.get = {
       .try(function completeFilter() {
         const { query: { order, filter, offset, limit, sortBy, tags } } = req;
         const parsedFilter = filter && JSON.parse(decodeURIComponent(filter)) || undefined;
-        const parsedTags = tags && JSON.parse(decodeURIComponent(tags)) || undefined;
+        let parsedTags = tags && JSON.parse(decodeURIComponent(tags)) || undefined;
+
+        if (parsedTags) {
+          parsedTags = parsedTags.map(tag => tag.toLowerCase().trim());
+        }
+
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
           owner,
