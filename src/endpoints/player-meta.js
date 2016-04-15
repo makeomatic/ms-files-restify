@@ -16,8 +16,8 @@ function generateJSON(amqp, filename, username) {
   return amqp
     .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
     .then(data => {
-      const { files, name, urls } = data;
-      const json = { name };
+      const { files, name, urls, username: owner } = data;
+      const json = { name, owner };
       const materials = json.materials = [];
 
       // create metadata file
@@ -82,8 +82,7 @@ exports.get = {
         return next('route');
       }
 
-      const username = get(req, 'user.id');
-      return generateJSON(req.amqp, filename, username)
+      return generateJSON(req.amqp, filename, get(req, 'user.id'))
         .then(json => {
           // TODO: add cache control
           res.contentType = 'application/json';
