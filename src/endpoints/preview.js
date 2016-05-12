@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
 const Errors = require('common-errors');
-const ir = require('image-resizer-wjordan');
+const ir = require('image-resizer-makeomatic');
 const config = require('../config.js');
 const pump = require('pump');
 const compact = require('lodash/compact');
