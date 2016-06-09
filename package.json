@@ -1,12 +1,13 @@
 {
   "name": "ms-files-restify",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {
-    "compile": "./node_modules/.bin/babel -d ./lib ./src",
+    "compile": "babel -d ./lib ./src",
     "prepublish": "npm run compile",
-    "test": "./node_modules/.bin/mocha",
+    "test": "npm run lint && mocha",
+    "lint": "eslint ./src",
     "doc": "apidoc -i ./src -o ./docs"
   },
   "repository": {
@@ -22,7 +23,7 @@
   "dependencies": {
     "debug": "^2.2.0",
     "glob": "^7.0.0",
-    "image-resizer-makeomatic": "^1.0.0",
+    "image-resizer-makeomatic": "^2.0.0",
     "lodash": "^4.5.0",
     "mm-lodash": "^1.2.5",
     "pump": "^1.0.1",
@@ -42,7 +43,8 @@
     "bunyan": "^1.6.0",
     "chai": "^3.5.0",
     "eslint": "^2.2.0",
-    "eslint-config-airbnb": "^6.0.1",
+    "eslint-config-airbnb-base": "^3.0.0",
+    "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-mocha": "^2.0.0",
     "json": "^9.0.3",
     "mocha": "^2.4.5",
