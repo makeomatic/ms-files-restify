@@ -174,7 +174,8 @@ exports.get = {
       .try(function completeFilter() {
         const { query: { order, filter, offset, limit, sortBy, tags } } = req;
         const parsedFilter = filter && JSON.parse(decodeURIComponent(filter)) || undefined;
-        const parsedTags = tags && JSON.parse(decodeURIComponent(tags)) || undefined;
+        const parsedTags = tags && JSON.parse(decodeURIComponent(tags)).map(tag => tag.toLowerCase().trim()) || undefined;
+
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
           owner,
