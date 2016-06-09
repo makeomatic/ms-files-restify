@@ -1,6 +1,6 @@
 {
   "name": "ms-files-restify",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   "peerDependencies": {
     "ms-users-restify": "~0.x.x",
     "restify-utils": "~0.x.x",
-    "ms-validation": "~1.x.x"
+    "ms-validation": "~2.x.x"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
@@ -45,12 +45,12 @@
     "eslint": "^2.2.0",
     "eslint-config-airbnb-base": "^3.0.0",
     "eslint-plugin-import": "^1.8.1",
-    "eslint-plugin-mocha": "^2.0.0",
+    "eslint-plugin-mocha": "^3.0.0",
     "json": "^9.0.3",
     "mocha": "^2.4.5",
-    "ms-users-restify": "^0.10.0",
-    "ms-validation": "^1.1.0",
-    "restify-utils": "^0.10.0"
+    "ms-users-restify": "^0.16.0",
+    "ms-validation": "^2.0.0",
+    "restify-utils": "^0.13.0"
   },
   "apidoc": {
     "version": "1.0.0",
