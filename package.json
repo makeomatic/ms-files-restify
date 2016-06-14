@@ -1,6 +1,6 @@
 {
   "name": "ms-files-restify",
-  "version": "0.19.1",
+  "version": "0.19.2",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {
@@ -35,14 +35,14 @@
     "ms-validation": "~2.x.x"
   },
   "devDependencies": {
-    "babel-cli": "^6.5.1",
+    "babel-cli": "^6.10.1",
     "babel-eslint": "^6.0.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.5.2",
     "bunyan": "^1.6.0",
     "chai": "^3.5.0",
-    "eslint": "^2.2.0",
+    "eslint": "^2.12.0",
     "eslint-config-airbnb-base": "^3.0.0",
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-mocha": "^3.0.0",
