@@ -60,7 +60,7 @@ const find = require('lodash/find');
 module.exports = function gceWebhook(req, res, next) {
   const headers = req.headers;
   const $gce = config.files.gce;
-  const gce = Array.isArray($gce) ? _gce : [$gce];
+  const gce = Array.isArray($gce) ? $gce : [$gce];
 
   // input
   const channel = headers['x-goog-channel-id'];
