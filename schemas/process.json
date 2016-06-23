@@ -1,0 +1,26 @@
+{
+  "id": "process",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["data"],
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": ["attributes", "type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "constant": "file"
+        },
+        "id": {
+          "type": "string"
+        },
+        "attributes": {
+          "minProperties": 1,
+          "type": "object"
+        }
+      }
+    }
+  }
+}
