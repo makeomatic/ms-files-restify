@@ -1,9 +1,11 @@
 /**
  * more docs available: https://cloud.google.com/storage/docs/object-change-notification#_Type_Sync
  */
+const Promise = require('bluebird');
 const Errors = require('common-errors');
 const config = require('../config.js');
 const url = require('url');
+const find = require('lodash/find');
 
 /**
  * Event examples:
@@ -57,40 +59,39 @@ const url = require('url');
 
 module.exports = function gceWebhook(req, res, next) {
   const headers = req.headers;
-  const gce = config.files.gce;
+  const $gce = config.files.gce;
+  const gce = Array.isArray($gce) ? $gce : [$gce];
 
-  // these are headers
+  // input
   const channel = headers['x-goog-channel-id'];
   const action = headers['x-goog-resource-state'];
   const resourceId = headers['x-goog-resource-id'];
   const resourceUri = headers['x-goog-resource-uri'];
   const token = headers['x-goog-channel-token'];
 
-  if (channel !== gce.channel) {
-    return next(new Errors.HttpStatusError(403, 'invalid channel'));
-  }
+  // verify
+  return Promise.try(() => {
+    // these are headers
+    const parsedUrl = url.parse(resourceUri);
+    const bucket = parsedUrl.pathname.split('/')[4];
+    const matchingConfiguration = find(gce, { channel, token, bucket });
 
-  if (token !== gce.token) {
-    return next(new Errors.HttpStatusError(403, 'invalid token'));
-  }
+    if (!matchingConfiguration) {
+      throw new Errors.HttpStatusError(403, 'webhook configuration mismatch');
+    }
 
-  const parsedUrl = url.parse(resourceUri);
-  const bucket = parsedUrl.pathname.split('/')[4];
-  if (bucket !== gce.bucket) {
-    return next(new Errors.HttpStatusError(403, 'invalid bucket'));
-  }
+    if (action === 'sync') {
+      res.send(200);
+      return false;
+    }
 
-  if (action === 'sync') {
-    res.send(200);
-    return next(false);
-  }
-
-  // add/delete notifications
-  req.file = {
-    action,
-    resourceId,
-    filename: req.body.name,
-  };
-
-  return next();
+    // add/delete notifications
+    req.file = {
+      action,
+      resourceId,
+      filename: req.body.name,
+    };
+    return null;
+  })
+  .asCallback(next);
 };
