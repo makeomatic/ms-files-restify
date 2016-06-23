@@ -3,7 +3,7 @@ const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'process';
 
 /**
- * @api {post} /process/:filename Re-processes filename based on input metadata
+ * @api {post} /process Re-processes filename based on input metadata
  * @apiVersion 1.0.0
  * @apiName ProcessFile
  * @apiGroup Files
