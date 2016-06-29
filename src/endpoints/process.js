@@ -51,7 +51,7 @@ exports.post = {
           const message = {
             uploadId: body.data.id,
             username: req.user.id,
-            export: body.data.attributes.body.export,
+            export: body.data.attributes.export,
           };
 
           return req.amqp
