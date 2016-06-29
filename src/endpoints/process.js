@@ -1,6 +1,8 @@
 const config = require('../config.js');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'process';
+const validator = require('../validator.js');
+
 
 /**
  * @api {post} /process Re-processes filename based on input metadata
@@ -42,18 +44,22 @@ exports.get = {
   middleware: ['auth'],
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
-      // basic message
-      const message = {
-        filename: req.body.data.id,
-        params: req.body.data.attributes,
-        username: req.user.id,
-      };
+      return validator
+        .validate(ROUTE_NAME, req.body)
+        .then(body => {
+          // basic message
+          const message = {
+            uploadId: body.data.id,
+            username: req.user.id,
+            export: body.data.attributes.body.export
+          };
 
-      return req.amqp
-        .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-        .then(() => {
-          res.send(201);
-          return false;
+          return req.amqp
+            .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
+            .then(() => {
+              res.send(201);
+              return false;
+            });
         })
         .asCallback(next);
     },
