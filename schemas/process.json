@@ -18,7 +18,12 @@
         },
         "attributes": {
           "minProperties": 1,
-          "type": "object"
+          "type": "object",
+          "properties": {
+            "export": {
+              "$ref": "common#/definitions/process"
+            }
+          }
         }
       }
     }

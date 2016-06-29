@@ -26,6 +26,39 @@
     "website": {
       "type": "string",
       "format": "uri"
+    },
+    "export": {
+      "type": "object",
+      "required": ["format", "compression"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["stl", "obj", "wrl"]
+        },
+        "compression": {
+          "type": "string",
+          "enum": ["zip", "gz"]
+        },
+        "meta": {
+          "type": "object",
+          "^.+$": {
+            "anyOf": [{
+              "type": "string"
+            }, {
+              "type": "number"
+            }, {
+              "type": "array",
+              "items": {
+                "oneOf": [{
+                  "type": "string"
+                }, {
+                  "type": "number"
+                }]
+              }
+            }]
+          }
+        }
+      }
     }
   }
 }

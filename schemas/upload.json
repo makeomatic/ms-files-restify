@@ -42,6 +42,9 @@
                       "minItems": 1
                     }
                   ]
+                },
+                "export": {
+                  "$ref": "common#/definitions/export"
                 }
               }
             },
