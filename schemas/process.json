@@ -21,7 +21,7 @@
           "type": "object",
           "properties": {
             "export": {
-              "$ref": "common#/definitions/process"
+              "$ref": "common#/definitions/export"
             }
           }
         }

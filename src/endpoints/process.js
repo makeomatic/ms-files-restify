@@ -3,7 +3,6 @@ const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'process';
 const validator = require('../validator.js');
 
-
 /**
  * @api {post} /process Re-processes filename based on input metadata
  * @apiVersion 1.0.0
@@ -23,7 +22,8 @@ const validator = require('../validator.js');
  *   	   	 "id": "9058df9-983e-43b6-8755-84b92c272357",
  *   	   	 "attributes": {
  *   	   	   "export": {
- *   	   	     "type": "wrl",
+ *   	   	     "format": "wrl",
+ *   	   	     "compression": "zip",
  *   	   	     "meta": {
  *   	   	       // some extra flags / meta
  *   	   	     }
@@ -39,7 +39,7 @@ const validator = require('../validator.js');
  * @apiSuccessExample {json} Success-Download:
  *     HTTP/1.1 201 Accepted
  */
-exports.get = {
+exports.post = {
   path: '/process',
   middleware: ['auth'],
   handlers: {
@@ -51,11 +51,11 @@ exports.get = {
           const message = {
             uploadId: body.data.id,
             username: req.user.id,
-            export: body.data.attributes.body.export
+            export: body.data.attributes.body.export,
           };
 
           return req.amqp
-            .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
+            .publish(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
             .then(() => {
               res.send(201);
               return false;
