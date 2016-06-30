@@ -85,14 +85,11 @@ exports.get = {
 
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-        .then(data => {
+        .then(({ uploadId, ...data }) => {
           res.send(200, {
             type: 'download',
-            id: data.uploadId,
-            attributes: {
-              files: data.files,
-              urls: data.urls,
-            },
+            id: uploadId,
+            attributes: data,
           });
           return false;
         })
