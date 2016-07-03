@@ -13,10 +13,12 @@ const ROUTE_NAME = 'download';
  * @apiDescription Returns signed URL that can be used to download file. If file is public - returns direct URLs
  *
  * @apiParam (Params) {String} filename
+ * @apiParam (Query)  {String} [rename] - if present, will generated signed URLs with names based on uploaded meta name
+ * @apiParam (Query)  {String} [types]  - if present, must be comma-delimted types to be returned, it `c-bin,c-texture,obj`
  *
  * @apiExample {curl} Example usage:
  *   curl -H 'Accept: application/vnd.api+json' \
- *     "https://api-sandbox-dev.matic.ninja/api/files/download/9058df9-983e-43b6-8755-84b92c272357"
+ *     "https://api-sandbox-dev.matic.ninja/api/files/download/9058df9-983e-43b6-8755-84b92c272357?types=c-bin,c-texture,c-preview"
  *
  * @apiUse FileNotFoundError
  * @apiUse PreconditionFailedError
@@ -75,7 +77,16 @@ exports.get = {
   handlers: {
     '1.0.0': function getDownloadURL(req, res, next) {
       // basic message
-      const message = { uploadId: req.params.filename };
+      const query = req.query;
+      const message = {
+        uploadId: req.params.filename,
+        rename: 'rename' in query,
+      };
+
+      // validation after message is sent
+      if (query.types) {
+        message.types = query.types.split(',');
+      }
 
       // if we are authenticated
       const username = get(req, 'user.id');

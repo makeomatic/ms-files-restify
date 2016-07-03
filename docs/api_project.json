@@ -1,1 +1,0 @@
-{  "version": "1.0.0",  "name": "Files family documentation",  "description": "Documentation for file-based actions",  "url": "https://api-users.sandbox.matic.ninja/api/files",  "sampleUrl": false,  "apidoc": "0.2.0",  "generator": {    "name": "apidoc",    "time": "2016-02-22T10:45:20.858Z",    "url": "http://apidocjs.com",    "version": "0.15.1"  }}
