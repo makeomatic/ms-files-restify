@@ -45,6 +45,9 @@
                 },
                 "export": {
                   "$ref": "common#/definitions/export"
+                },
+                "controlsData": {
+                  "$ref": "common#/definitions/controlsData"
                 }
               }
             },

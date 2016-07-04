@@ -27,6 +27,14 @@
       "type": "string",
       "format": "uri"
     },
+    "controlsData": {
+      "type": "array",
+      "minItems": 29,
+      "maxItems": 29,
+      "items": {
+        "type": "number"
+      }
+    },
     "export": {
       "type": "object",
       "required": ["format", "compression"],

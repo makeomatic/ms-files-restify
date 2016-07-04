@@ -39,6 +39,9 @@
                 },
                 "tags": {
                   "$ref": "common#/definitions/tags"
+                },
+                "controlsData": {
+                  "$ref": "common#/definitions/controlsData"
                 }
               }
             }

@@ -23,15 +23,16 @@ const ROUTE_NAME = 'upload';
  * @apiParam (Body) {Object} data.attributes                                data attributes container
  * @apiParam (Body) {Object} data.attributes.meta                           custom name of the file
  * @apiParam (Body) {String} data.attributes.meta.name                      custom name of the file
- * @apiParam (Body) {String} data.attributes.meta.description               file description
- * @apiParam (Body) {String} data.attributes.meta.website                   some link for a given file
- * @apiParam (Body) {String[]} data.attributes.meta.tags                    tags for a given model
+ * @apiParam (Body) {String} [data.attributes.meta.description]               file description
+ * @apiParam (Body) {String} [data.attributes.meta.website]                   some link for a given file
+ * @apiParam (Body) {String[]} [data.attributes.meta.tags]                    tags for a given model
+ * @apiParam (Body) {Number[]} [data.attributes.meta.controlsData]          camera position for the model
  * @apiParam (Body) {Object} [data.attributes.access]                       access data container
- * @apiParam (Body) {Boolean} data.attributes.access.setPublic              if set to `true` will make model public on upload
+ * @apiParam (Body) {Boolean} [data.attributes.access.setPublic]              if set to `true` will make model public on upload
  * @apiParam (Body) {Object[]} data.attributes.files                        array of file objects
  * @apiParam (Body) {Number} data.attributes.files.contentLength            size of file in bytes
- * @apiParam (Body) {String="c-bin","с-texture","c-preview","c-archive"}    data.attributes.files.type type
- * @apiParam (Body) {String} data.attributes.files.contentLength            file size
+ * @apiParam (Body) {String="c-bin","с-texture","c-preview"}                data.attributes.files.type type
+ * @apiParam (Body) {String} data.attributes.files.decompressedLength       file size
  * @apiParam (Body) {String="application/octet-stream","image/jpeg"}        data.attributes.files.contentType file content type
  * @apiParam (Body) {String="gzip"} [data.attributes.files.contentEncoding] encoding of the file
  * @apiParam (Body) {String} data.attributes.files.md5Hash                  checksum

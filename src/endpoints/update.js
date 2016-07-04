@@ -16,15 +16,16 @@ const ROUTE_NAME = 'update';
  * @apiHeaderExample Authorization-Example:
  *   "Authorization: JWT myreallyniceandvalidjsonwebtoken"
  *
- * @apiParam (Body) {Object} data                             Data container.
- * @apiParam (Body) {String} data.id                          File id.
- * @apiParam (Body) {String="file"} data.type                 Data type, must be "file".
- * @apiParam (Body) {Object} data.attributes                  Data attributes container.
- * @apiParam (Body) {Object} data.attributes.meta             Metadata container.
- * @apiParam (Body) {String} [data.attributes.meta.name]        Custom name of the file.
- * @apiParam (Body) {String} [data.attributes.meta.description] File description.
- * @apiParam (Body) {String} [data.attributes.meta.website]     Some link for a given file.
- * @apiParam (Body) {String[]} [data.attributes.meta.tags]      Some tags for a given file.
+ * @apiParam (Body) {Object} data                                  Data container.
+ * @apiParam (Body) {String} data.id                               File id.
+ * @apiParam (Body) {String="file"} data.type                      Data type, must be "file".
+ * @apiParam (Body) {Object} data.attributes                       Data attributes container.
+ * @apiParam (Body) {Object} data.attributes.meta                  Metadata container.
+ * @apiParam (Body) {String} [data.attributes.meta.name]           Custom name of the file.
+ * @apiParam (Body) {String} [data.attributes.meta.description]    File description.
+ * @apiParam (Body) {String} [data.attributes.meta.website]        Some link for a given file.
+ * @apiParam (Body) {String[]} [data.attributes.meta.tags]         Some tags for a given file.
+ * @apiParam (Body) {Number[]} [data.attributes.meta.controlsData] Some tags for a given file.
  *
  * @apiExample {curl} Example usage:
  *   curl -i -X PATCH
@@ -75,11 +76,7 @@ exports.patch = {
             message.username = username;
           }
 
-          return amqp.publishAndWait(
-            getRoute(ROUTE_NAME),
-            message,
-            { timeout: getTimeout(ROUTE_NAME) }
-          );
+          return amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
         })
         .then(() => {
           res.send(204);
