@@ -31,7 +31,7 @@ function generateJSON(amqp, filename, username) {
         }
       });
 
-      return json;
+      return { json, response: data };
     });
 }
 exports.generateJSON = generateJSON;
@@ -83,10 +83,9 @@ exports.get = {
       }
 
       return generateJSON(req.amqp, filename, get(req, 'user.id'))
-        .then(json => {
-          // TODO: add cache control
+        .then(data => {
           res.contentType = 'application/json';
-          res.send(json);
+          res.send(data.json);
           return false;
         })
         .asCallback(next);
