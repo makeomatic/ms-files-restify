@@ -35,6 +35,16 @@
         "type": "number"
       }
     },
+    "type": {
+      "type": "string",
+      "enum": [
+        "default",
+        "object",
+        "dslr",
+        "human",
+        "user"
+      ]
+    },
     "export": {
       "type": "object",
       "required": ["format", "compression"],
