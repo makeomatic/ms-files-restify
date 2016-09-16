@@ -1,4 +1,5 @@
 const config = require('../config.js');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'finish';
 
@@ -34,7 +35,7 @@ exports.post = {
         .then(() => 'OK')
         .catch({ code: 202 }, err => `202: ${err.message}`)
         .catch({ code: 412 }, err => `412: ${err.message}`)
-        .then(msg => {
+        .then((msg) => {
           res.send(202, msg);
           return false;
         })

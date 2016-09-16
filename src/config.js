@@ -1,5 +1,6 @@
 const ld = require('lodash');
 const users = require('ms-users-restify');
+
 const BLACK_LIST = ['reconfigure', 'getTimeout', 'getRoute'];
 
 /**

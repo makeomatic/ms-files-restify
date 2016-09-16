@@ -1,5 +1,6 @@
 const validator = require('../validator.js');
 const config = require('../config.js');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'update';
 
@@ -64,7 +65,7 @@ exports.patch = {
     '1.0.0': function updateFileInformation(req, res, next) {
       return validator
         .validate(ROUTE_NAME, req.body)
-        .then(body => {
+        .then((body) => {
           const { amqp, user } = req;
           const { data: { id: uploadId, attributes: { meta } } } = body;
           const message = { uploadId, meta };

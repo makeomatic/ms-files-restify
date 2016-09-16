@@ -1,6 +1,7 @@
 const config = require('../config.js');
 const get = require('lodash/get');
 const { HttpStatusError } = require('common-errors');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'info';
 
@@ -121,7 +122,7 @@ exports.get = {
 
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-        .then(rsp => {
+        .then((rsp) => {
           const isPrivate = username && rsp.username === username;
           const fileData = rsp.file;
 

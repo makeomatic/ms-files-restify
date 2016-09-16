@@ -1,6 +1,7 @@
 const validator = require('../validator.js');
 const config = require('../config.js');
 const map = require('lodash/map');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'upload';
 
@@ -50,7 +51,7 @@ const ROUTE_NAME = 'upload';
  *             "website": "https://banana.com"
  *           },
  *           "access": {
- *           	 "setPublic": true
+ *             "setPublic": true
  *           },
  *           "files": [
  *             {
@@ -125,7 +126,7 @@ exports.post = {
     '1.0.0': function initResumableUpload(req, res, next) {
       return validator
         .validate(ROUTE_NAME, req.body)
-        .then(body => {
+        .then((body) => {
           const { amqp, user } = req;
           const attributes = body.data.attributes;
           const username = user.id;
@@ -143,7 +144,7 @@ exports.post = {
           return amqp
             .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) });
         })
-        .then(result => {
+        .then((result) => {
           res.send(201, {
             type: 'upload',
             id: result.uploadId,

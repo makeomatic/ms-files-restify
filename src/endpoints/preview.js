@@ -75,7 +75,7 @@ exports.get = {
 
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), { filename, username: alias }, { timeout: getTimeout(ROUTE_NAME) })
-        .then(data => {
+        .then((data) => {
           const preview = data.file.preview;
           if (!preview) {
             throw new Errors.HttpStatusError(412, 'preview was not extracted yet');
@@ -92,7 +92,7 @@ exports.get = {
             res.removeHeader('Content-Encoding');
           }
 
-          return Promise.fromNode(done => {
+          return Promise.fromNode((done) => {
             pump(
               image.getFile(),
               new Identify(),

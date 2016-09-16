@@ -1,5 +1,6 @@
 const config = require('../config.js');
 const get = require('lodash/get');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
@@ -96,7 +97,7 @@ exports.get = {
 
       return req.amqp
         .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-        .then(data => {
+        .then((data) => {
           const { uploadId: id, ...attributes } = data;
           res.send(200, { type: 'download', id, attributes });
           return false;

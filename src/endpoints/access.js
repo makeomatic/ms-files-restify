@@ -1,5 +1,6 @@
 const validator = require('../validator.js');
 const config = require('../config.js');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'access';
 
@@ -50,7 +51,7 @@ exports.put = {
     '1.0.0': function adjustAccess(req, res, next) {
       return validator
         .validate(ROUTE_NAME, req.body)
-        .then(body => {
+        .then((body) => {
           const { data: { id, attributes: { public: setPublic } } } = body;
           const message = {
             uploadId: id,

@@ -4,6 +4,7 @@ const config = require('../config.js');
 const validator = require('../validator.js');
 const ld = require('lodash').runInContext();
 const { stringify: qs } = require('querystring');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'list';
 
@@ -173,14 +174,14 @@ exports.get = {
       return Promise
       .try(function completeFilter() {
         const { query: { order, filter, offset, limit, sortBy, tags } } = req;
-        const parsedFilter = filter && JSON.parse(decodeURIComponent(filter)) || undefined;
-        const parsedTags = tags && JSON.parse(decodeURIComponent(tags)).map(tag => tag.toLowerCase().trim()) || undefined;
+        const parsedFilter = (filter && JSON.parse(decodeURIComponent(filter))) || undefined;
+        const parsedTags = (tags && JSON.parse(decodeURIComponent(tags)).map(tag => tag.toLowerCase().trim())) || undefined;
 
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
           owner,
-          offset: offset && +offset || undefined,
-          limit: limit && +limit || 10,
+          offset: (offset && +offset) || undefined,
+          limit: (limit && +limit) || 10,
           filter: parsedFilter || {},
           criteria: sortBy || undefined,
           public: isPublic,

@@ -1,4 +1,5 @@
 const config = require('../config.js');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'remove';
 

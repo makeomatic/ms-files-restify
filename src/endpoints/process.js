@@ -1,7 +1,8 @@
 const config = require('../config.js');
+const validator = require('../validator.js');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'process';
-const validator = require('../validator.js');
 
 /**
  * @api {post} /process Re-processes filename based on input metadata
@@ -16,21 +17,21 @@ const validator = require('../validator.js');
  *
  * @apiExample {curl} Example usage:
  *   curl -H 'Accept: application/vnd.api+json' \
- *   	 -X POST -d '{
- *   	   "data": {
- *   	   	 "type": "file",
- *   	   	 "id": "9058df9-983e-43b6-8755-84b92c272357",
- *   	   	 "attributes": {
- *   	   	   "export": {
- *   	   	     "format": "wrl",
- *   	   	     "compression": "zip",
- *   	   	     "meta": {
- *   	   	       // some extra flags / meta
- *   	   	     }
- *   	   	   }
- *   	   	 }
- *   	   }
- *   	 }' \
+ *      -X POST -d '{
+ *        "data": {
+ *           "type": "file",
+ *           "id": "9058df9-983e-43b6-8755-84b92c272357",
+ *           "attributes": {
+ *             "export": {
+ *               "format": "wrl",
+ *               "compression": "zip",
+ *               "meta": {
+ *                 // some extra flags / meta
+ *               }
+ *             }
+ *           }
+ *        }
+ *      }' \
  *     "https://api-sandbox-dev.matic.ninja/api/files/process"
  *
  * @apiUse FileNotFoundError
@@ -46,7 +47,7 @@ exports.post = {
     '1.0.0': function getDownloadURL(req, res, next) {
       return validator
         .validate(ROUTE_NAME, req.body)
-        .then(body => {
+        .then((body) => {
           // basic message
           const message = {
             uploadId: body.data.id,

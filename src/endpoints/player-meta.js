@@ -1,6 +1,7 @@
 const config = require('../config.js');
 const get = require('lodash/get');
 const path = require('path');
+
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
@@ -15,7 +16,7 @@ function generateJSON(amqp, filename, username) {
 
   return amqp
     .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-    .then(data => {
+    .then((data) => {
       const { files, name, urls, username: owner } = data;
       const json = { name, owner };
       const materials = json.materials = [];
@@ -83,7 +84,7 @@ exports.get = {
       }
 
       return generateJSON(req.amqp, filename, get(req, 'user.id'))
-        .then(data => {
+        .then((data) => {
           res.contentType = 'application/json';
           res.send(data.json);
           return false;
