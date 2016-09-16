@@ -42,6 +42,9 @@
                 },
                 "controlsData": {
                   "$ref": "common#/definitions/controlsData"
+                },
+                "type": {
+                  "$ref": "common#/definitions/type"
                 }
               }
             }
