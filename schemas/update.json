@@ -45,6 +45,9 @@
                 },
                 "type": {
                   "$ref": "common#/definitions/type"
+                },
+                "backgroundColor": {
+                  "$ref": "common#/definitions/color"
                 }
               }
             }
