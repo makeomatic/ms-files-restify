@@ -26,6 +26,11 @@ const ROUTE_NAME = 'update';
  * @apiParam (Body) {String} [data.attributes.meta.description]         File description.
  * @apiParam (Body) {String} [data.attributes.meta.website]             Some link for a given file.
  * @apiParam (Body) {String} [data.attributes.meta.type]                Type of model
+ * @apiParam (Body) {String} [data.attributes.meta.backgroundImage]     Background image
+ * @apiParam (Body) {String} [data.attributes.meta.backgroundImage.filename]    File name
+ * @apiParam (Body) {String} [data.attributes.meta.backgroundImage.contentType] Image type. Could be image/png or image/jpeg
+ * @apiParam (Body) {String} [data.attributes.meta.backgroundImage.url]         Direct link to the image
+ * @apiParam (Body) {String} [data.attributes.meta.backgroundColor]     Background color. Could be in hex or rgb($r, $g, $b) formats.
  * @apiParam (Body) {String[]} [data.attributes.meta.tags]              Some tags for a given file.
  * @apiParam (Body) {Number[]} [data.attributes.meta.controlsData]      Some tags for a given file.
  *

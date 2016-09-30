@@ -1,6 +1,10 @@
 {
   "id": "common",
   "definitions": {
+    "filename": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{32}\/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}\/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"
+    },
     "tag": {
       "type": "string",
       "pattern": "^[^,]{1,20}$"
@@ -33,6 +37,23 @@
       "maxItems": 29,
       "items": {
         "type": "number"
+      }
+    },
+    "backgroundImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "$ref": "common#/definitions/filename"
+        },
+        "contentType": {
+          "type": "string",
+          "enum": ["image/jpeg", "image/png"]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
       }
     },
     "type": {
