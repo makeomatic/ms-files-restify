@@ -54,6 +54,9 @@
                 },
                 "backgroundColor": {
                   "$ref": "common#/definitions/color"
+                },
+                "backgroundImage": {
+                  "$ref": "common#/definitions/backgroundImage"
                 }
               }
             },
