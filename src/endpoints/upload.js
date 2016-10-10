@@ -128,6 +128,7 @@ exports.post = {
         .validate(ROUTE_NAME, req.body)
         .then((body) => {
           const { amqp, user } = req;
+          const { origin } = req.headers;
           const attributes = body.data.attributes;
           const username = user.id;
           const message = {
@@ -139,6 +140,10 @@ exports.post = {
           const meta = message.meta;
           if (meta.tags) {
             meta.tags = meta.tags.map(tag => tag.toLowerCase().trim());
+          }
+
+          if (origin) {
+            message.attributes.origin = origin;
           }
 
           return amqp
