@@ -134,16 +134,13 @@ exports.post = {
           const message = {
             ...attributes,
             username,
+            origin,
           };
 
           // alter meta tags
           const meta = message.meta;
           if (meta.tags) {
             meta.tags = meta.tags.map(tag => tag.toLowerCase().trim());
-          }
-
-          if (origin) {
-            message.attributes.origin = origin;
           }
 
           return amqp
