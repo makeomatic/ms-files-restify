@@ -40,21 +40,13 @@
       }
     },
     "backgroundImage": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "filename": {
-          "$ref": "common#/definitions/filename"
-        },
-        "contentType": {
-          "type": "string",
-          "enum": ["image/jpeg", "image/png"]
-        },
-        "url": {
-          "type": "string",
-          "format": "uri"
-        }
-      }
+      "oneOf": [{
+        "type": "string",
+        "format": "uri"
+      }, {
+        "type": "string",
+        "constant": ""
+      }]
     },
     "type": {
       "type": "string",
