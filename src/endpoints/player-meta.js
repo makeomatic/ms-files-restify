@@ -1,6 +1,5 @@
 const config = require('../config.js');
 const get = require('lodash/get');
-const filter = require('lodash/filter');
 const path = require('path');
 
 const { getRoute, getTimeout } = config;
