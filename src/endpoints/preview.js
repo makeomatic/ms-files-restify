@@ -7,7 +7,7 @@ const compact = require('lodash/compact');
 
 const { getRoute, getTimeout } = config;
 const { img: Img, streams } = ir;
-const { identify: Identify, resize: Resize, filter: Filter, optimize: Optimize, restify: Restify } = streams;
+const { identify, resize, filter, optimize, restify: Restify } = streams;
 
 // amqp route
 const ROUTE_NAME = 'info';
@@ -95,12 +95,12 @@ exports.get = {
           return Promise.fromNode((done) => {
             pump(
               image.getFile(),
-              new Identify(),
-              new Resize(),
-              new Filter(),
-              new Optimize(),
+              identify(),
+              resize(),
+              filter(),
+              optimize(),
               new Restify(req, res),
-              err => (err ? done(err) : done(null, false))
+              err => (err ? done(err) : done(null, false)),
             );
           });
         })
