@@ -1,6 +1,6 @@
 {
   "name": "ms-files-restify",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "common-errors": "^1.0.0",
     "debug": "^2.3.2",
     "glob": "^7.1.1",
-    "image-resizer-makeomatic": "^3.0.0",
+    "image-resizer-makeomatic": "^3.0.1",
     "lodash": "^4.17.2",
     "mm-lodash": "^1.2.5",
     "pump": "^1.0.1",
