@@ -128,11 +128,13 @@ exports.post = {
         .validate(ROUTE_NAME, req.body)
         .then((body) => {
           const { amqp, user } = req;
+          const { origin } = req.headers;
           const attributes = body.data.attributes;
           const username = user.id;
           const message = {
             ...attributes,
             username,
+            origin,
           };
 
           // alter meta tags

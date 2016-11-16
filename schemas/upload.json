@@ -51,6 +51,12 @@
                 },
                 "type": {
                   "$ref": "common#/definitions/type"
+                },
+                "backgroundColor": {
+                  "$ref": "common#/definitions/color"
+                },
+                "backgroundImage": {
+                  "$ref": "common#/definitions/backgroundImage"
                 }
               }
             },
@@ -70,6 +76,14 @@
             "unlisted": {
               "type": "boolean",
               "default": false
+            },
+            "resumable": {
+              "type": "boolean",
+              "default": true
+            },
+            "uploadType": {
+              "type": "string",
+              "enum": [ "simple" ]
             },
             "files": {
               "type": "array",

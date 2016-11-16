@@ -19,6 +19,7 @@ function generateJSON(amqp, filename, username) {
     .then((data) => {
       const { files, name, urls, username: owner } = data;
       const json = { name, owner };
+
       const materials = json.materials = [];
 
       // create metadata file
@@ -29,6 +30,11 @@ function generateJSON(amqp, filename, username) {
         } else if (type === 'c-bin') {
           json.file = urls[idx];
           json.size = file.decompressedLength || file.contentLength;
+        } else if (type === 'c-simple') {
+          if (!json.images) {
+            json.images = [];
+          }
+          json.images.push(urls[idx]);
         }
       });
 
