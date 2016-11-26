@@ -31,6 +31,9 @@
                 "name": {
                   "$ref": "common#/definitions/name"
                 },
+                "alias": {
+                  "$ref": "common#/definitions/alias"
+                },
                 "description": {
                   "$ref": "common#/definitions/description"
                 },
