@@ -6,9 +6,11 @@
   "scripts": {
     "compile": "babel -d ./lib ./src",
     "prepublish": "npm run compile",
-    "test": "npm run lint && mocha",
+    "test": "npm run lint",
     "lint": "eslint ./src",
-    "doc": "apidoc -i ./src -o ./docs"
+    "doc": "apidoc -i ./src -o ./docs",
+    "preversion": "npm test",
+    "postversion": "git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
@@ -24,17 +26,18 @@
     "common-errors": "^1.0.0",
     "debug": "^2.3.3",
     "glob": "^7.1.1",
-    "image-resizer-makeomatic": "^3.1.1",
+    "image-resizer-makeomatic": "^3.1.2",
     "lodash": "^4.17.2",
     "mm-lodash": "^1.2.5",
+    "ms-perf": "^1.0.1",
     "pump": "^1.0.1",
     "urlsafe-base64": "^1.0.0"
   },
   "peerDependencies": {
+    "bluebird": "~3.x.x",
     "ms-users-restify": "~1.x.x",
-    "restify-utils": "~1.x.x",
     "ms-validation": "~3.x.x",
-    "bluebird": "~3.x.x"
+    "restify-utils": "~1.x.x"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -45,7 +48,7 @@
     "bunyan": "^1.8.5",
     "chai": "^3.5.0",
     "eslint": "^3.11.0",
-    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-config-airbnb-base": "^11.0.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-mocha": "^4.7.0",
     "json": "^9.0.4",

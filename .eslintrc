@@ -4,7 +4,14 @@
   "rules": {
     "max-len": [2, 150],
     "prefer-arrow-callback": 0,
-    "no-param-reassign": [2,{"props":false}]
+    "no-param-reassign": [2,{"props":false}],
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never",
+    }]
   },
   "plugins": [
     "mocha"

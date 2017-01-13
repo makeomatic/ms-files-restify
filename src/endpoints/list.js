@@ -3,6 +3,7 @@ const Errors = require('common-errors');
 const config = require('../config.js');
 const validator = require('../validator.js');
 const ld = require('lodash').runInContext();
+const perf = require('ms-perf');
 const { stringify: qs } = require('querystring');
 
 const { getRoute, getTimeout } = config;
@@ -146,6 +147,7 @@ exports.get = {
   middleware: ['conditional-auth'],
   handlers: {
     '1.0.0': function listFiles(req, res, next) {
+      const timer = perf('list');
       const user = req.user || false;
       const isAdmin = user && user.isAdmin();
       const alias = user && user.attributes.alias;
@@ -188,6 +190,7 @@ exports.get = {
           tags: parsedTags,
         });
       })
+      .tap(timer('pre-parse'))
       .catch(function validationError(err) {
         req.log.error('input error', err);
         throw new Errors.ValidationError('query.filter and query.sortBy must be uri encoded, ' +
@@ -196,12 +199,14 @@ exports.get = {
       .then(function validateMessage(message) {
         return validator.validate(ROUTE_NAME, message);
       })
+      .tap(timer('validate'))
       .then(function askAMQP(message) {
         return Promise.join(
           req.amqp.publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) }),
           message
         );
       })
+      .tap(timer('ms-files'))
       .spread(function listResponse(answer, message) {
         const { page, pages, cursor } = answer;
         const { order, filter, offset, limit, criteria: sortBy, tags } = message;
@@ -229,12 +234,29 @@ exports.get = {
           res.links.next = `${base}?${qs(nextQS)}`;
         }
 
-        const { File } = config.models;
-        res.send(answer.files.map(function transformFile(fileData) {
-          return File.transform(fileData, true, isPublic);
-        }));
+        return answer;
       })
-      .asCallback(next);
+      .tap(timer('qs'))
+      .then((answer) => {
+        const { transform } = config.models.File;
+        return answer.files.map(function transformFile(fileData) {
+          return transform(fileData, true, isPublic);
+        });
+      })
+      .tap(timer('serialized'))
+      .asCallback(function response(err, data) {
+        // make sure we do not leak
+        const timers = timer();
+
+        if (err) {
+          return next(err);
+        }
+
+        res.meta.timers = timers;
+        res.send(data);
+
+        return next(null, data);
+      });
     },
   },
 };

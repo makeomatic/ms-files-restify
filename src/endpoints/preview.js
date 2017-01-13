@@ -100,7 +100,7 @@ exports.get = {
               filter(),
               optimize(),
               new Restify(req, res),
-              err => (err ? done(err) : done(null, false)),
+              err => (err ? done(err) : done(null, false))
             );
           });
         })
