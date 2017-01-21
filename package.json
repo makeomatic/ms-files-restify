@@ -1,6 +1,6 @@
 {
   "name": "ms-files-restify",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "http adapter for ms-files",
   "main": "./lib/index.js",
   "scripts": {

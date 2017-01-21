@@ -31,16 +31,17 @@ ld.mixin(require('mm-lodash'));
  * @apiUse FileNotFoundError
  * @apiUse ValidationError
  *
- * @apiParam (Query) {Number{0..}} [offset]         how many files to skip
- * @apiParam (Query) {Number{1..100}} [limit]       how many files to return per page
- * @apiParam (Query) {String} [filter]              `encodeURIComponent(JSON.stringify(filterObject))`, pass it as value.
- *                                                   `#` - filters by filename, other keys - by allowed metadata
- *                                                   `#multi` - specify `fields` and value to search in `OR` fashion
- * @apiParam (Query) {String} [sortBy]              `encodeURIComponent(sortBy)`, if not specified, sorts by
- *                                                   createdAt, otherwise by metadata field passed here
+ * @apiParam (Query) {Number{0..}} [offset] how many files to skip
+ * @apiParam (Query) {Number{1..100}} [limit] how many files to return per page
+ * @apiParam (Query) {Boolean} [shallow] if defined will omit files array from response
+ * @apiParam (Query) {String} [filter] `encodeURIComponent(JSON.stringify(filterObject))`, pass it as value.
+ *                                     `#` - filters by filename, other keys - by allowed metadata
+ *                                     `#multi` - specify `fields` and value to search in `OR` fashion
+ * @apiParam (Query) {String} [sortBy] `encodeURIComponent(sortBy)`, if not specified, sorts by
+ *                                     createdAt, otherwise by metadata field passed here
  * @apiParam (Query) {String="ASC","DESC"} [order]  sorting order, defaults to "ASC", case-insensitive
- * @apiParam (Query) {String} [tags]                `encodeURIComponent(JSON.stringify(tags))`,
-                                                    tags that should be contained in files
+ * @apiParam (Query) {String} [tags]  `encodeURIComponent(JSON.stringify(tags))`,
+ *                                    tags that should be contained in files
  *
  * @apiSuccess (Code 200) {Object}   meta                           response meta information
  * @apiSuccess (Code 200) {String}   meta.id                        request id
@@ -154,6 +155,7 @@ exports.get = {
       const id = user && user.id;
       const qOwner = req.query.owner;
       const qPub = req.query.pub;
+      const without = (req.query.shallow && ['files']) || undefined;
 
       let isPublic;
       let owner;
@@ -188,6 +190,7 @@ exports.get = {
           criteria: sortBy || undefined,
           public: isPublic,
           tags: parsedTags,
+          without,
         });
       })
       .tap(timer('pre-parse'))
