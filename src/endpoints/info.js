@@ -132,6 +132,7 @@ exports.get = {
           }
 
           res.send(config.models.File.transform(fileData, true, !isPrivate));
+          return false;
         })
         .asCallback(next);
     },

@@ -153,6 +153,8 @@ exports.post = {
             attributes: result,
             links: map(result.files, 'location'),
           });
+
+          return false;
         })
         .asCallback(next);
     },
