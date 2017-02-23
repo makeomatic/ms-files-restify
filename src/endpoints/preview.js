@@ -114,7 +114,7 @@ exports.get = {
             }
 
             // translate to hex if we have it stored in RGB
-            if (backgroundColor.charAtCode(0) !== '#') {
+            if (backgroundColor.charAt(0) !== '#') {
               backgroundColor = rgbToHex(backgroundColor);
             }
 
