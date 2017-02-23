@@ -52,6 +52,9 @@
         "constant": ""
       }]
     },
+    "fitToSquare": {
+      "type": "boolean"
+    },
     "type": {
       "type": "string",
       "enum": [

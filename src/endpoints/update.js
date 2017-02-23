@@ -29,7 +29,8 @@ const ROUTE_NAME = 'update';
  * @apiParam (Body) {String} [data.attributes.meta.backgroundImage]     Background image
  * @apiParam (Body) {String} [data.attributes.meta.backgroundColor]     Background color. Could be in hex or rgb($r, $g, $b) formats.
  * @apiParam (Body) {String[]} [data.attributes.meta.tags]              Some tags for a given file.
- * @apiParam (Body) {Number[]} [data.attributes.meta.controlsData]      Some tags for a given file.
+ * @apiParam (Body) {Number[]} [data.attributes.meta.controlsData]      Initial position for camera
+ * @apiParam (Body) {Boolean} [data.attributes.meta.fitToSquare]        How to display preview
  *
  * @apiExample {curl} Example usage:
  *   curl -i -X PATCH

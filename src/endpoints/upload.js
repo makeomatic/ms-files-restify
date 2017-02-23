@@ -24,12 +24,13 @@ const ROUTE_NAME = 'upload';
  * @apiParam (Body) {Object} data.attributes                                data attributes container
  * @apiParam (Body) {Object} data.attributes.meta                           custom name of the file
  * @apiParam (Body) {String} data.attributes.meta.name                      custom name of the file
- * @apiParam (Body) {String} [data.attributes.meta.description]               file description
- * @apiParam (Body) {String} [data.attributes.meta.website]                   some link for a given file
- * @apiParam (Body) {String[]} [data.attributes.meta.tags]                    tags for a given model
+ * @apiParam (Body) {String} [data.attributes.meta.description]             file description
+ * @apiParam (Body) {String} [data.attributes.meta.website]                 some link for a given file
+ * @apiParam (Body) {String[]} [data.attributes.meta.tags]                  tags for a given model
  * @apiParam (Body) {Number[]} [data.attributes.meta.controlsData]          camera position for the model
+ * @apiParam (Body) {Boolean} [data.attributes.meta.fitToSquare]            how to display preview
  * @apiParam (Body) {Object} [data.attributes.access]                       access data container
- * @apiParam (Body) {Boolean} [data.attributes.access.setPublic]              if set to `true` will make model public on upload
+ * @apiParam (Body) {Boolean} [data.attributes.access.setPublic]            if set to `true` will make model public on upload
  * @apiParam (Body) {Object[]} data.attributes.files                        array of file objects
  * @apiParam (Body) {Number} data.attributes.files.contentLength            size of file in bytes
  * @apiParam (Body) {String="c-bin","с-texture","c-preview"}                data.attributes.files.type type

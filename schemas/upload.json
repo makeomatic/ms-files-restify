@@ -57,6 +57,9 @@
                 },
                 "backgroundImage": {
                   "$ref": "common#/definitions/backgroundImage"
+                },
+                "fitToSquare": {
+                  "$ref": "common#/definitions/fitToSquare"
                 }
               }
             },
