@@ -11,6 +11,17 @@ const { identify, resize, filter, optimize, restify: Restify } = streams;
 
 // amqp route
 const ROUTE_NAME = 'info';
+const numbers = /\d+/g;
+const toHex = x => (+x).toString(16);
+const InvalidBackgroundError = new Errors.HttpStatusError(400, 'background color doesn\'t match settings');
+
+/**
+ * Converts rgb to hex
+ * @return {String}
+ */
+function rgbToHex(input) {
+  return `#${input.match(numbers).map(toHex).join('')}`;
+}
 
 /**
  * @api {get} /preview/:alias/(:modifiers)/:filename(.:format) Get preview of a provided file
@@ -92,9 +103,25 @@ exports.get = {
             res.removeHeader('Content-Encoding');
           }
 
+          // if we have padding set - verify it matches internal data
           const paddingColor = image.modifiers.paddingColor;
-          if (paddingColor && paddingColor !== data.file.backgroundColor) {
-            throw new Errors.HttpStatusError(400, 'background color doesn\'t match settings');
+          if (paddingColor) {
+            let backgroundColor = data.file.backgroundColor;
+
+            // no background color - mismatch
+            if (!backgroundColor) {
+              throw InvalidBackgroundError;
+            }
+
+            // translate to hex if we have it stored in RGB
+            if (backgroundColor.charAtCode(0) !== '#') {
+              backgroundColor = rgbToHex(backgroundColor);
+            }
+
+            // verify that colors match
+            if (backgroundColor !== paddingColor) {
+              throw InvalidBackgroundError;
+            }
           }
 
           return Promise.fromNode((done) => {
