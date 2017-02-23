@@ -47,7 +47,7 @@ const ROUTE_NAME = 'info';
  *     binarycontentofimage
  */
 
-const modRegExp = /(?:(?:[hwscyxq][1-9][0-9]*|[cgf][a-z]+)-?){1,9}/;
+const modRegExp = /(?:(?:[hwscyxq][1-9][0-9]*|[cgf][a-z]+|b[0-9a-f]{6})-?){1,9}/;
 const ALLOWED_FORMATS = Img.validOutputFormats;
 
 exports.get = {
