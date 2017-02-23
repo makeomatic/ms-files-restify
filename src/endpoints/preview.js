@@ -119,7 +119,7 @@ exports.get = {
             }
 
             // verify that colors match
-            if (backgroundColor !== paddingColor) {
+            if (backgroundColor.toLowerCase() !== paddingColor) {
               throw InvalidBackgroundError;
             }
           }
