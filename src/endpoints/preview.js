@@ -92,6 +92,11 @@ exports.get = {
             res.removeHeader('Content-Encoding');
           }
 
+          const paddingColor = image.modifiers.paddingColor;
+          if (paddingColor && paddingColor !== data.file.backgroundColor) {
+            throw new Errors.HttpStatusError(400, 'background color doesn\'t match settings');
+          }
+
           return Promise.fromNode((done) => {
             pump(
               image.getFile(),
