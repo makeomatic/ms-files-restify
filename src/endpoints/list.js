@@ -247,7 +247,7 @@ exports.get = {
       })
       .tap(timer('qs'))
       .get('files')
-      .each((fileData) => {
+      .map((fileData) => {
         // deserialize file to our format
         const file = deserialize(fileData, isPublic);
 
