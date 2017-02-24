@@ -131,7 +131,14 @@ exports.get = {
             throw new HttpStatusError(404, 'file not found');
           }
 
-          res.send(config.models.File.transform(fileData, true, !isPrivate));
+          // deserialize file to our format
+          const file = config.models.File.deserialize(fileData, !isPrivate);
+
+          // enhance with the owner data for proper links
+          file.attributes.owner = alias;
+
+          // serialize back to output format
+          res.send(file.serialize(true));
           return false;
         })
         .asCallback(next);

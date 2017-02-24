@@ -12,6 +12,11 @@ const ROUTE_NAME = 'list';
 // adds all mixins
 ld.mixin(require('mm-lodash'));
 
+// cached func
+const encodeJSON = obj => encodeURIComponent(JSON.stringify(obj));
+const decodeJSON = str => JSON.parse(decodeURIComponent(str));
+const lowercaseAndTrim = str => String(str).toLowerCase().trim();
+
 /**
  * @api {get} / returns list of uploaded files
  * @apiVersion 1.0.0
@@ -156,6 +161,7 @@ exports.get = {
       const qOwner = req.query.owner;
       const qPub = req.query.pub;
       const without = (req.query.shallow && ['files']) || undefined;
+      const { deserialize } = config.models.File;
 
       let isPublic;
       let owner;
@@ -178,8 +184,8 @@ exports.get = {
       return Promise
       .try(function completeFilter() {
         const { query: { order, filter, offset, limit, sortBy, tags } } = req;
-        const parsedFilter = (filter && JSON.parse(decodeURIComponent(filter))) || undefined;
-        const parsedTags = (tags && JSON.parse(decodeURIComponent(tags)).map(tag => tag.toLowerCase().trim())) || undefined;
+        const parsedFilter = (filter && decodeJSON(filter)) || undefined;
+        const parsedTags = (tags && decodeJSON(tags).map(lowercaseAndTrim)) || undefined;
 
         return ld.compactObject({
           order: (order || 'DESC').toUpperCase(),
@@ -213,16 +219,16 @@ exports.get = {
       .spread(function listResponse(answer, message) {
         const { page, pages, cursor } = answer;
         const { order, filter, offset, limit, criteria: sortBy, tags } = message;
-        const selfQS = {
+        const selfQS = ld.compactObject({
           order,
           limit,
           offset: offset || 0,
           sortBy,
-          filter: encodeURIComponent(JSON.stringify(filter)),
+          filter: (filter && encodeJSON(filter)) || undefined,
           pub: Number(isPublic),
           owner,
-          tags: encodeURIComponent(JSON.stringify(tags)),
-        };
+          tags: (tags && encodeJSON(tags)) || undefined,
+        });
 
         res.meta = { page, pages };
 
@@ -240,11 +246,16 @@ exports.get = {
         return answer;
       })
       .tap(timer('qs'))
-      .then((answer) => {
-        const { transform } = config.models.File;
-        return answer.files.map(function transformFile(fileData) {
-          return transform(fileData, true, isPublic);
-        });
+      .get('files')
+      .each((fileData) => {
+        // deserialize file to our format
+        const file = deserialize(fileData, isPublic);
+
+        // enhance with the owner data
+        if (owner) file.attributes.owner = owner;
+
+        // serialize back to output format
+        return file.serialize(true);
       })
       .tap(timer('serialized'))
       .asCallback(function response(err, data) {
