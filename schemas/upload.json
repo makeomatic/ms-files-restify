@@ -72,6 +72,22 @@
                 }
               }
             },
+            "postAction": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "update": {
+                  "additionalProperties": false,
+                  "type": "object",
+                  "properties": {
+                    "additionalProperties": false,
+                    "alias": {
+                      "$ref": "common#/definitions/alias"
+                    }
+                  }
+                }
+              }
+            },
             "temp": {
               "type": "boolean",
               "default": false
