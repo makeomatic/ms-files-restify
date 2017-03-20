@@ -77,10 +77,9 @@
               "additionalProperties": false,
               "properties": {
                 "update": {
-                  "additionalProperties": false,
                   "type": "object",
+                  "additionalProperties": false,
                   "properties": {
-                    "additionalProperties": false,
                     "alias": {
                       "$ref": "common#/definitions/alias"
                     }
