@@ -5,6 +5,43 @@ const path = require('path');
 const { getRoute, getTimeout } = config;
 const ROUTE_NAME = 'download';
 
+function prepareJSON(file, idx) {
+  const type = file.type;
+  const json = this.json;
+
+  switch (type) {
+    case 'c-texture':
+      json.materials.push({ texture: this.urls[idx] });
+      break;
+
+    case 'c-bin':
+      json.file = this.urls[idx];
+      json.size = file.decompressedLength || file.contentLength;
+      break;
+
+    case 'c-simple':
+    case 'c-pack':
+      json.images.push(this.urls[idx]);
+      json.sizes.push(file.decompressedLength || file.contentLength);
+      break;
+
+    default:
+      break;
+  }
+}
+
+function parseJSON(data) {
+  const { files, name, urls, username: owner } = data;
+  const json = { name, owner, images: [], sizes: [] };
+
+  json.materials = [];
+
+  // create metadata file
+  files.forEach(prepareJSON, { urls, json });
+
+  return { json, response: data };
+}
+
 // helper to generate JSON meta for player
 function generateJSON(amqp, filename, username) {
   // basic message
@@ -16,30 +53,7 @@ function generateJSON(amqp, filename, username) {
 
   return amqp
     .publishAndWait(getRoute(ROUTE_NAME), message, { timeout: getTimeout(ROUTE_NAME) })
-    .then((data) => {
-      const { files, name, urls, username: owner } = data;
-      const json = { name, owner };
-
-      const materials = json.materials = [];
-
-      // create metadata file
-      files.forEach((file, idx) => {
-        const type = file.type;
-        if (type === 'c-texture') {
-          materials.push({ texture: urls[idx] });
-        } else if (type === 'c-bin') {
-          json.file = urls[idx];
-          json.size = file.decompressedLength || file.contentLength;
-        } else if (type === 'c-simple') {
-          if (!json.images) {
-            json.images = [];
-          }
-          json.images.push(urls[idx]);
-        }
-      });
-
-      return { json, response: data };
-    });
+    .then(parseJSON);
 }
 exports.generateJSON = generateJSON;
 
