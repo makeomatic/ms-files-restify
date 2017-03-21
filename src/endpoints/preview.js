@@ -104,7 +104,7 @@ exports.get = {
           }
 
           // if we have padding set - verify it matches internal data
-          const paddingColor = image.modifiers.paddingColor;
+          const paddingColor = image.modifiers && image.modifiers.paddingColor;
           if (paddingColor) {
             let backgroundColor = data.file.backgroundColor;
 
