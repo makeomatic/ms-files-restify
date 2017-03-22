@@ -92,8 +92,14 @@ exports.get = {
             throw new Errors.HttpStatusError(412, 'preview was not extracted yet');
           }
 
-          const path = compact([modifiers, preview]).join('/');
+          // simulate lack of modifiers
+          const path = compact([modifiers || '-', preview]).join('/');
           const image = new Img({ ...req, path });
+
+          // sometimes it mistakes first segment for modifiers
+          if (!modifiers) {
+            image.path = image.path.replace(/^\/?-\/?/, '');
+          }
 
           // internal format parsing is quite hard and may miss actual filename
           image.outputFormat = format;
