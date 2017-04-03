@@ -21,6 +21,7 @@ const ROUTE_NAME = 'update';
  * @apiParam (Body) {String} data.id                                    File id.
  * @apiParam (Body) {String="file"} data.type                           Data type, must be "file".
  * @apiParam (Body) {Object} data.attributes                            Data attributes container.
+ * @apiParam (Body) {Boolean} data.attributes.directOnly                Defines this file as direct-only accessible
  * @apiParam (Body) {Object} data.attributes.meta                       Metadata container.
  * @apiParam (Body) {String} [data.attributes.meta.name]                Custom name of the file.
  * @apiParam (Body) {String} [data.attributes.meta.description]         File description.
@@ -70,9 +71,13 @@ exports.patch = {
         .validate(ROUTE_NAME, req.body)
         .then((body) => {
           const { amqp, user } = req;
-          const { data: { id: uploadId, attributes: { meta } } } = body;
+          const { data: { id: uploadId, attributes: { meta, directOnly } } } = body;
           const message = { uploadId, meta };
           const username = user.id;
+
+          if (directOnly !== undefined && directOnly !== null) {
+            message.directOnly = directOnly;
+          }
 
           if (meta.tags) {
             meta.tags = meta.tags.map(tag => tag.toLowerCase().trim());

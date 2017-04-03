@@ -38,6 +38,7 @@ const ROUTE_NAME = 'upload';
  * @apiParam (Body) {String="application/octet-stream","image/jpeg"}        data.attributes.files.contentType file content type
  * @apiParam (Body) {String="gzip"} [data.attributes.files.contentEncoding] encoding of the file
  * @apiParam (Body) {String} data.attributes.files.md5Hash                  checksum
+ * @apiParam (Body) {Boolean} [data.attributes.directOnly]                     whether this file is accessible via directOnly link
  * @apiParam (Body) {Object} [data.attributes.postAction]                   container for post-upload actions
  * @apiParam (Body) {Object} [data.attributes.postAction.update]            container for post-upload update action
  * @apiParam (Body) {Object} [data.attributes.postAction.update.alias]      set alias for this file after upload has been completed

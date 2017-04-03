@@ -103,6 +103,9 @@
               "type": "string",
               "enum": [ "simple" ]
             },
+            "directOnly": {
+              "type": "boolean"
+            },
             "files": {
               "type": "array",
               "minItems": 1,

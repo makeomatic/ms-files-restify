@@ -21,8 +21,11 @@
         "attributes": {
           "additionalProperties": false,
           "type": "object",
-          "required": ["meta"],
+          "minProperties": 1,
           "properties": {
+            "directOnly": {
+              "type": "boolean"
+            },
             "meta": {
               "type": "object",
               "additionalProperties": false,
