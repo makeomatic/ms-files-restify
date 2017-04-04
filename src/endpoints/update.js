@@ -79,7 +79,7 @@ exports.patch = {
             message.directOnly = directOnly;
           }
 
-          if (meta.tags) {
+          if (meta && meta.tags) {
             meta.tags = meta.tags.map(tag => tag.toLowerCase().trim());
           }
 
