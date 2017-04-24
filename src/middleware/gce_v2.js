@@ -43,6 +43,6 @@ function parseInput(req) {
 
 module.exports = function gceWebhook(req, res, next) {
   return Promise
-    .try(parseInput.bind(req))
+    .try(parseInput.bind(undefined, req))
     .asCallback(next);
 };
