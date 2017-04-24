@@ -12,11 +12,11 @@ const gce = Array.isArray($gce) ? $gce : [$gce];
 
 function parseInput(req) {
   const message = req.body.message;
-  const { bucket, eventType, resource } = message.attributes;
+  const { bucketId: bucket, eventType, resource } = message.attributes;
   const gceSettings = find(gce, { bucket });
 
   if (!gceSettings) {
-    return Promise.reject(new HttpStatusError(400, 'failed to find gce bucket'));
+    return Promise.reject(new HttpStatusError(400, `failed to find gce bucket: ${bucket}`));
   }
 
   if (gceSettings.token !== req.query.token) {
@@ -36,7 +36,7 @@ function parseInput(req) {
   req.file = {
     action,
     resourceId: resource,
-    filename: JSON.parse(Buffer.from(message.data)).name,
+    filename: JSON.parse(Buffer.from(message.data, 'base64')).name,
   };
   return null;
 }
