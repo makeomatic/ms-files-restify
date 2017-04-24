@@ -28,6 +28,7 @@ const config = module.exports = {
       token: '',
       channel: '',
     },
+    gce_v2: [],
   },
 };
 
