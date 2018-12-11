@@ -23,10 +23,10 @@
   "homepage": "https://github.com/makeomatic/ms-files-restify#readme",
   "dependencies": {
     "common-errors": "^1.0.0",
-    "debug": "^2.6.3",
+    "debug": "^2.6.9",
     "glob": "^7.1.1",
     "image-resizer-makeomatic": "^3.4.0",
-    "lodash": "^4.17.2",
+    "lodash": "^4.17.5",
     "mm-lodash": "^1.2.5",
     "ms-perf": "^1.0.1",
     "pump": "^1.0.1",
